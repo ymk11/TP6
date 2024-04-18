@@ -1,9 +1,6 @@
-#ifndef POSITION_H
-#define POSITION_H
-
-#include <iostream>
 #pragma once
-
+#include <iostream>
+#include <cassert>
 class Position {
 public:
 
@@ -15,8 +12,8 @@ public:
     void setX(int x);
     void setY(int y);
 private:
-    int x;
-    int y;
+    int x_;
+    int y_;
 };
 
-#endif // POSITION_H
+

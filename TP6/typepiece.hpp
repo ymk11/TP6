@@ -1,7 +1,6 @@
-#ifndef TYPEPIECE_H
-#define TYPEPIECE_H
+#pragma once
 #include <iostream>
-#pragma once 
+
 
 enum class TypePiece {
     Roi,
@@ -9,4 +8,4 @@ enum class TypePiece {
     Cavalier,
 };
 
-#endif // TYPEPIECE_H
+
