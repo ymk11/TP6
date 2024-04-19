@@ -1,9 +1,12 @@
 #pragma once
 #include <QPushButton>
-#include "position.hpp"
+#include "piece.hpp"
 #include <memory>
 
-class Piece;
+
+
+
+
 
 class Case : public QPushButton {
     Q_OBJECT
