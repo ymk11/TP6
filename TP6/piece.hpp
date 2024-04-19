@@ -6,24 +6,29 @@
 #include <string>
 #include <QString>
 
-class Echiquier;
+namespace ui {
+    class Echiquier;
+}
 
-class Piece {
-public:
-    
+namespace chess {
+  
+    class Piece {
+    public:
 
-    Piece(TypePiece type, Couleur couleur, std::string image);
-    virtual ~Piece() = default;
 
-    virtual const TypePiece& getTypePiece() const;
-    virtual const Couleur& getCouleur() const ;
-    virtual  const QString& getImage() const;
-    virtual std::vector<Position> getListeDeplacements(const Position& depart, const Echiquier&) const = 0;
+        Piece(TypePiece type, Couleur couleur, std::string image);
+        virtual ~Piece() = default;
 
-private:
-    TypePiece type_;
-    Couleur couleur_;
-    QString image_;
-};
+        virtual const TypePiece& getTypePiece() const;
+        virtual const Couleur& getCouleur() const;
+        virtual  const QString& getImage() const;
+        virtual std::vector<Position> getListeDeplacements(const Position& depart, const ui::Echiquier&) const = 0;
+
+    private:
+        TypePiece type_;
+        Couleur couleur_;
+        QString image_;
+    };
+}
 
 

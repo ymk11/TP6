@@ -4,31 +4,34 @@
 #include "piece.hpp"
 #include <QMainWindow>
 
-class Echiquier : public QMainWindow {
-    Q_OBJECT
+namespace ui {
+    class Echiquier : public QMainWindow {
+        Q_OBJECT
 
-public:
+    public:
 
-    Echiquier(QWidget* parent = nullptr);
-    Echiquier() = default;
+        Echiquier(QWidget* parent = nullptr);
+        Echiquier() = default;
 
-    void initializeBoard(); // connect(case, &Case::caseClicked, this, &Echiquier::onCaseClicked);
-    const Case& getCase(const Position& position) const;
-    void setCase(const Position& position, std::unique_ptr<Piece> piece);
-    bool estEchec() const;
-    bool isEmptyCase(const Position& position) const;
+        void initializeBoard(); // connect(case, &Case::caseClicked, this, &Echiquier::onCaseClicked);
+        chess::Case& getCase(const chess::Position& position) ;
+        void setCase(const chess::Position& position, std::unique_ptr<chess::Piece> piece);
+        bool estEchec() const;
+        bool isEmptyCase(const chess::Position& position) ;
+        void moveTo(const chess::Position& start, const chess::Position& destination);
 
 
-private:
+    private:
 
-    std::vector<std::vector<Case>> plateau_; // Représentation 2D du plateau
+        std::vector<std::vector<chess::Case>> plateau_; // Représentation 2D du plateau
 
-    Case* lastSelected;
+        chess::Case lastSelected;
 
-    int turn;
+        int turn;
 
-private slots:
-    void handleButtonClick(const Position& position); // Slot to handle button clicks
-};
+    private slots:
+        void handleButtonClick(const chess::Position& position); // Slot to handle button clicks
+    };
+}
 
 

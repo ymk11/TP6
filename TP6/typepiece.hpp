@@ -1,11 +1,12 @@
 #pragma once
 #include <iostream>
 
-
-enum class TypePiece {
-    Roi,
-    Tour,
-    Cavalier,
-};
+namespace chess {
+    enum class TypePiece {
+        Roi,
+        Tour,
+        Cavalier,
+    };
+}
 
 

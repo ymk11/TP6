@@ -50,6 +50,9 @@
     <ClCompile Include="case.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="temporaryPieceWrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="couleur.hpp">
@@ -68,6 +71,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="typepiece.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kingException.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="temporaryPieceWrapper.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

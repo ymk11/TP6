@@ -2,11 +2,14 @@
 #include "Piece.hpp"
 #include <iostream>
 
-class Cavalier : public Piece {
-public:
-	Cavalier(Couleur couleur);
-	std::vector<Position> getListeDeplacements(const Position& depart, const Echiquier&) const override;
 
-};
+namespace chess {
+	class Cavalier : public Piece {
+	public:
+		Cavalier(Couleur couleur);
+		std::vector<Position> getListeDeplacements(const Position& depart, const ui::Echiquier&) const override;
+
+	};
+}
 
 

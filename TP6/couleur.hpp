@@ -1,6 +1,9 @@
 #pragma once
-enum class Couleur {
-    Blanc,
-    Noir
-};
+
+namespace chess {
+    enum class Couleur {
+        Blanc,
+        Noir
+    };
+}
 

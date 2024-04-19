@@ -2,10 +2,18 @@
 #include "Piece.hpp"
 #include <iostream>
 
+namespace chess {
+    class Roi : public Piece {
+    public:
+        Roi(Couleur couleur);
+        ~Roi();
 
-class Roi : public Piece {
-public:
-    Roi( Couleur couleur);
+        std::vector<Position> getListeDeplacements(const Position& depart, const ui::Echiquier&) const override;
+    private:
+        static int instanceCount_;
 
-    std::vector<Position> getListeDeplacements(const Position& depart, const Echiquier&) const override;
-};
+
+    };
+    
+    
+}

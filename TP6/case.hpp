@@ -4,33 +4,31 @@
 #include <memory>
 
 
+namespace chess {
+    class Case : public QPushButton {
+        Q_OBJECT
+
+    public:
+        Case(const Position& position, std::unique_ptr<Piece> piece, QWidget* parent = nullptr);
+        Case() = default;
+        void setPiece(std::unique_ptr<Piece> newPiece); //on prend possion de l'ancienne piece : setpiece( move(oldPiece))
+        const std::unique_ptr<Piece>& getPieceInfo()const;
+        std::unique_ptr<Piece> getPiece();
+        const Position& getPosition() const;
+        void updateAppearance();
 
 
+    signals:
 
+        void caseClicked(const Position& position);
 
-class Case : public QPushButton {
-    Q_OBJECT
+    private slots:
 
-public:
-    Case(const Position& position, std::unique_ptr<Piece> piece, QWidget* parent = nullptr); 
-    Case() = default;
-    void setPiece(std::unique_ptr<Piece> newPiece); //on prend possion de l'ancienne piece : setpiece( move(oldPiece))
-    const std::unique_ptr<Piece>& getPieceInfo()const; 
-    std::unique_ptr<Piece> getPiece();
-    const Position& getPosition() const;
-    void updateAppearance();
-   
+        void onClicked();
 
-signals:
+    private:
 
-    void caseClicked(const Position& position);
-
-private slots:
-
-    void onClicked();
-
-private:
-    
-    Position position_;
-    std::unique_ptr<Piece> piece_;
-};
+        Position position_;
+        std::unique_ptr<Piece> piece_;
+    };
+}
