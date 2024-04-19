@@ -19,7 +19,7 @@ Cavalier::Cavalier(Couleur couleur) : Piece(TypePiece::Cavalier, couleur, "♞")
 //    return 0;
 //}
 
-std::vector<Position> Cavalier::getListeDeplacements(const Position& départ, const std::vector<std::vector<Case>>&) const {
+std::vector<Position> Cavalier::getListeDeplacements(const Position& départ, const Echiquier&) const {
     std::vector<Position> vect;
     return vect;
 }

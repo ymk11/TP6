@@ -1,5 +1,6 @@
 #include "Piece.hpp"
-#include "case.hpp"
+#include "echiquier.hpp"
+
 
 
 

@@ -14,7 +14,7 @@ Roi::Roi(Couleur couleur): Piece(TypePiece::Roi,couleur, "♔") {}
 //    return false;
 //}
 
-std::vector<Position> Roi::getListeDeplacements(const Position& depart, const std::vector<std::vector<Case>>&) const {
+std::vector<Position> Roi::getListeDeplacements(const Position& depart, const Echiquier&) const {
     std::vector<Position> vect;
     return vect;
 }
