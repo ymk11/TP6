@@ -1,9 +1,8 @@
 #pragma once
 #include <vector>
 #include "case.hpp"
+#include "piece.hpp"
 #include <QMainWindow>
-
-
 
 class Echiquier : public QMainWindow {
     Q_OBJECT
@@ -24,9 +23,9 @@ private:
 
     std::vector<std::vector<Case>> plateau_; // Représentation 2D du plateau
 
-    Case lastSelected;
+    Case* lastSelected;
 
-    int turns;
+    int turn;
 
 private slots:
     void handleButtonClick(const Position& position); // Slot to handle button clicks

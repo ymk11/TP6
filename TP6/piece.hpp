@@ -6,7 +6,7 @@
 #include <string>
 #include <QString>
 
-
+class Case;
 
 class Piece {
 public:
@@ -20,7 +20,7 @@ public:
     virtual  const QString& getImage() const;
     //J'ai du enlever echequier en argument à cause de définition de class circulaire. ça causait des erreurs de  compilation. à la place,
     //c'est l'échéquier qui checkera si les déplacements sont valides ou non
-    virtual std::vector<Position> getListeDeplacements(const Position& depart) const = 0;
+    virtual std::vector<Position> getListeDeplacements(const Position& depart, const std::vector<std::vector<Case>>&) const = 0;
 
 private:
     TypePiece type_;

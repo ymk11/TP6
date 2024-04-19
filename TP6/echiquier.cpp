@@ -1,6 +1,8 @@
 #include "echiquier.hpp"
 
 
+
+
 Echiquier::Echiquier(QWidget* parent ): QMainWindow(parent) {
 
     initializeBoard();
