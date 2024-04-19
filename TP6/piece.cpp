@@ -1,4 +1,7 @@
 #include "Piece.hpp"
+#include "case.hpp"
+
+
 
 
 Piece::Piece(TypePiece type, Couleur couleur, std::string image) : type_(type), 

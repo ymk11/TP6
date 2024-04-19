@@ -24,7 +24,7 @@ Tour::Tour(Couleur couleur) : Piece(TypePiece::Tour, couleur,"♖") {}
 //    return true;
 //}
 
-std::vector<Position> Tour::getListeDeplacements(const Position& départ) const {
+std::vector<Position> Tour::getListeDeplacements(const Position& départ, const std::vector<std::vector<Case>>&) const {
     std::vector<Position> vect;
     return vect;
 }

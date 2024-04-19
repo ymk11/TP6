@@ -1,4 +1,6 @@
 #include "case.hpp"
+#include "piece.hpp"
+
 
 
 Case::Case(const Position& position, std::unique_ptr<Piece> piece, QWidget* parent) :
