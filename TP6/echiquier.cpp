@@ -1,7 +1,7 @@
 #include "echiquier.hpp"
 
 
-Echiquier::Echiquier(QWidget* parent = nullptr): QMainWindow(parent) {
+Echiquier::Echiquier(QWidget* parent ): QMainWindow(parent) {
 
     initializeBoard();
 }
@@ -27,7 +27,8 @@ void Echiquier::setCase(const Position& position, std::unique_ptr<Piece> piece) 
 }
 
 bool Echiquier::isEmptyCase(const Position& position) const {
-    getCase(position).getPieceInfo() == nullptr;
+    return getCase(position).getPieceInfo() == nullptr;
+
 }
 
 

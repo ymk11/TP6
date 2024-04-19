@@ -5,8 +5,7 @@
 class Cavalier : public Piece {
 public:
 	Cavalier(Couleur couleur);
-	bool estDeplacementValide(const Position& depart, const Position& arrivee, Echiquier& echiquier) const override;
-	std::vector<Position> getListeDeplacementsValide(const Position& départ, const Echiquier& echiquier) const override;
+	std::vector<Position> getListeDeplacements(const Position& depart) const override;
 
 };
 

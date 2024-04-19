@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "case.hpp"
 #include <QMainWindow>
 
@@ -10,6 +11,7 @@ class Echiquier : public QMainWindow {
 public:
 
     Echiquier(QWidget* parent = nullptr);
+    Echiquier() = default;
 
     void initializeBoard(); // connect(case, &Case::caseClicked, this, &Echiquier::onCaseClicked);
     const Case& getCase(const Position& position) const;
@@ -20,7 +22,7 @@ public:
 
 private:
 
-    QVector<QVector<Case>> plateau_; // Représentation 2D du plateau
+    std::vector<std::vector<Case>> plateau_; // Représentation 2D du plateau
 
     Case lastSelected;
 

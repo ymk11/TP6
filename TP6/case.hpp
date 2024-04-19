@@ -23,7 +23,7 @@ signals:
 
 private slots:
 
-    void onClicked() {}
+    void onClicked();
 
 private:
     

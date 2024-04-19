@@ -1,9 +1,7 @@
 #pragma once
-#include <iostream>
 #include "couleur.hpp"
 #include "typepiece.hpp"
 #include "position.hpp"
-#include "echiquier.hpp"
 #include <vector>
 #include <string>
 #include <QString>
@@ -14,20 +12,20 @@ class Piece {
 public:
     
 
-    Piece(TypePiece type, Couleur couleur, std::string representation);
+    Piece(TypePiece type, Couleur couleur, std::string image);
     virtual ~Piece() = default;
 
     virtual const TypePiece& getTypePiece() const;
     virtual const Couleur& getCouleur() const ;
-    virtual const QString& getRepresentation() const;
-
-    virtual bool estDeplacementValide(const Position& depart, const Position& arrivee, Echiquier& echiquier) const = 0;
-    virtual std::vector<Position> getListeDeplacementsValide(const Position& depart, const Echiquier& echiquier) const = 0;
+    virtual  const QString& getImage() const;
+    //J'ai du enlever echequier en argument à cause de définition de class circulaire. ça causait des erreurs de  compilation. à la place,
+    //c'est l'échéquier qui checkera si les déplacements sont valides ou non
+    virtual std::vector<Position> getListeDeplacements(const Position& depart) const = 0;
 
 private:
     TypePiece type_;
     Couleur couleur_;
-    QString representation_;
+    QString image_;
 };
 
 
