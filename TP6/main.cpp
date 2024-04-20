@@ -4,18 +4,15 @@
 #include "kingException.hpp"
 #include "echiquier.hpp"
 #include <iostream>
+#include <QSize>
 
 
-void displayErrorBox(QString erreur) {
-	QMessageBox::critical(nullptr, "Error", erreur);
-}
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
 
+void displayErrorBox() {
+	//example for exercise 2
 	try
 	{
-		chess::Roi r1(chess::Couleur::Blanc) ;
+		chess::Roi r1(chess::Couleur::Blanc);
 		chess::Roi r2(chess::Couleur::Blanc);
 		chess::Roi r3(chess::Couleur::Blanc);
 
@@ -24,9 +21,17 @@ int main(int argc, char *argv[])
 	}
 	catch (const chess::KingException& e)
 	{
-		displayErrorBox(e.what());
+		QMessageBox::critical(nullptr, "Error", e.what());
 
 	}
-   
-    return a.exec();
+}
+int main(int argc, char *argv[])
+{
+	QApplication a(argc, argv);
+	ui::Echiquier echiquier;
+	echiquier.show();
+	
+	
+
+	return a.exec();
 }

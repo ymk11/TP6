@@ -2,7 +2,8 @@
 
 namespace chess {
 
-    Tour::Tour(Couleur couleur) : Piece(TypePiece::Tour, couleur, "♖") {}
+    Tour::Tour(Couleur couleur) : Piece(TypePiece::Tour, couleur,
+        "..\\assets\\rd.png", "..\\assets\\rl.png") {}
 
     //bool Tour::estDeplacementValide(const Position& depart, const Position& arrivee)  const {
     //

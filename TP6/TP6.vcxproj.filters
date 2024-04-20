@@ -93,4 +93,42 @@
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\assets\rl.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\assets\bd.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\assets\bl.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\assets\kd.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\assets\kl.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\assets\nd.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\assets\nl.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\assets\pd.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\assets\pl.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\assets\qd.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\assets\ql.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\assets\rd.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

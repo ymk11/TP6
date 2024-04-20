@@ -2,6 +2,8 @@
 #include <vector>
 #include "case.hpp"
 #include "piece.hpp"
+#include "QVBoxLayout"
+#include "QHBoxLayout"
 #include <QMainWindow>
 
 namespace ui {
@@ -11,8 +13,6 @@ namespace ui {
     public:
 
         Echiquier(QWidget* parent = nullptr);
-        Echiquier() = default;
-
         void initializeBoard(); // connect(case, &Case::caseClicked, this, &Echiquier::onCaseClicked);
         chess::Case& getCase(const chess::Position& position) ;
         void setCase(const chess::Position& position, std::unique_ptr<chess::Piece> piece);
@@ -23,7 +23,7 @@ namespace ui {
 
     private:
 
-        std::vector<std::vector<chess::Case>> plateau_; // Représentation 2D du plateau
+        std::vector<std::vector<std::unique_ptr<chess::Case>>> plateau_; // Représentation 2D du plateau
 
         chess::Case lastSelected;
 

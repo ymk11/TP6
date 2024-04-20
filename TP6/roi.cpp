@@ -5,7 +5,8 @@ namespace chess {
 
     int Roi::instanceCount_ = 0;
 
-    Roi::Roi(Couleur couleur) : Piece(TypePiece::Roi, couleur, "♔") {
+    Roi::Roi(Couleur couleur) : Piece(TypePiece::Roi, couleur,
+        "..\\assets\\kd.png", "..\\assets\\kl.png") {
         instanceCount_++;
         if (instanceCount_ > 2) {
             throw KingException("Nombre de roir excédé : (2)");

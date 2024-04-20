@@ -16,7 +16,8 @@ namespace chess {
     public:
 
 
-        Piece(TypePiece type, Couleur couleur, std::string image);
+        Piece(TypePiece type, Couleur couleur, std::string black, std::string white);
+        Piece() = default;
         virtual ~Piece() = default;
 
         virtual const TypePiece& getTypePiece() const;

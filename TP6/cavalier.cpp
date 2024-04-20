@@ -1,7 +1,8 @@
 ﻿#include "cavalier.hpp"
 
 namespace chess {
-    Cavalier::Cavalier(Couleur couleur) : Piece(TypePiece::Cavalier, couleur, "♞") {}
+    Cavalier::Cavalier(Couleur couleur) : Piece(TypePiece::Cavalier,
+        couleur, "..\\assets\\nd.png", "..\\assets\\nl.png") {}
 
     //bool Cavalier::estDeplacementValide(const Position& depart, const Position& arrivee) const  {
     //    // vérifier si le déplacement correspond au mouvement du cavalier (deux cases dans une direction et une case dans l'autre)
