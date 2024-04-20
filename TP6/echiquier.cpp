@@ -2,30 +2,35 @@
 #include "Roi.hpp"
 #include "tour.hpp"
 #include "cavalier.hpp"
+#include "QLabel"
 
 
 
 namespace ui {
     Echiquier::Echiquier(QWidget* parent) : QMainWindow(parent) {
+        centralWidget = new QWidget();
+        mainWindow = new QHBoxLayout(this);
+        mainWindow->setSpacing(55);
+        mainWindow->setContentsMargins(QMargins(15,15,50,15));
+        setCentralWidget(centralWidget);
+        centralWidget->setLayout(mainWindow);
         initializeBoard();
+        initializeMenu();
     }
 
     void Echiquier::initializeBoard() { //initialiser l'UI
         using namespace chess;
-        QWidget* centralWidget = new QWidget;
-        setCentralWidget(centralWidget);
         plateau_.resize(8);
         for (int i = 0; i < 8; ++i) {
             plateau_[i].resize(8);
         }
 
         setWindowTitle(" Chess Game");
-        QVBoxLayout* mainWindow = new QVBoxLayout(this);
-        QVBoxLayout* chessBoard = new QVBoxLayout() ;
+        chessBoard = new QVBoxLayout() ;
         chessBoard->setSpacing(0);
         mainWindow->addLayout(chessBoard);
         for (int i = 0; i < 8; i++) {
-            QHBoxLayout* hBoxLayout = new QHBoxLayout;
+            QHBoxLayout* hBoxLayout = new QHBoxLayout();
             hBoxLayout->setSpacing(0);
 
             for (int j = 0; j < 8; j++) {
@@ -33,7 +38,7 @@ namespace ui {
                 if ((j+i) % 2 == 0) {
                     couleur = Couleur::Noir;
                 }
-                plateau_[i][j] = std::make_unique<Case>(couleur,Position(3,4));
+                plateau_[i][j] = std::make_unique<Case>(couleur,Position(i,j),std::make_unique<Cavalier>(Couleur::Noir));
                 plateau_[i][j]->setMinimumSize(140, 140);
 
                 
@@ -44,12 +49,27 @@ namespace ui {
             }
             chessBoard->addLayout(hBoxLayout);
         }
+    }
+
+    void Echiquier::initializeMenu() {
+        QVBoxLayout* menuBox = new QVBoxLayout();
+        menuBox->setAlignment(Qt::AlignTop);
+
+        QPushButton* startButton = new QPushButton("Start");
+        menuBox->addWidget(startButton);
+        startButton->setMinimumSize(200, 30);
+        mainWindow->addLayout(menuBox);
+
+        QVBoxLayout* labelBox = new QVBoxLayout();
+        QLabel* label= new QLabel("Select starting board");
+        labelBox->setAlignment(Qt::AlignCenter);
+        labelBox->addWidget(label);
+        menuBox->addLayout(labelBox);
         
-        centralWidget->setLayout(mainWindow); 
     }
 
     chess::Case& Echiquier::getCase(const chess::Position& position) {
-        return *plateau_[position.getY()][position.getX()];
+        return *plateau_[position.getX()][position.getY()];
     }
 
     void Echiquier::setCase(const chess::Position& position, std::unique_ptr<chess::Piece> piece) {
@@ -78,7 +98,11 @@ namespace ui {
     // La liste de position valide s'assurera que rien n'est hors position
 
     void Echiquier::handleButtonClick(const chess::Position& position) {
+        getCase(position).setPiece(nullptr);
         //fonction principale du jeu. Déclencher lors d'un click sur une case
+    }
+    void Echiquier::handleStartButton() {
+
     }
 
 }

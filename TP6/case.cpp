@@ -9,7 +9,7 @@ namespace chess {
 		connect(this, &QPushButton::clicked, this, &Case::onClicked);
 		if (couleur == Couleur::Blanc) {
 			QPushButton::setStyleSheet("QPushButton {"
-				"    background-color: brown;"  
+				"    background-color: darkgreen;"  
 				"    border: none;"            
 				"    color: white;"             
 				"}");
@@ -28,7 +28,7 @@ namespace chess {
 		connect(this, &QPushButton::clicked, this, &Case::onClicked);
 		if (couleur == Couleur::Blanc) {
 			QPushButton::setStyleSheet("QPushButton {"
-				"    background-color: brown;"
+				"    background-color: darkgreen;"
 				"    border: none;"
 				"    color: white;"
 				"}");

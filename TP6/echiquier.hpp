@@ -13,7 +13,8 @@ namespace ui {
     public:
 
         Echiquier(QWidget* parent = nullptr);
-        void initializeBoard(); // connect(case, &Case::caseClicked, this, &Echiquier::onCaseClicked);
+        void initializeBoard(); 
+        void initializeMenu();
         chess::Case& getCase(const chess::Position& position) ;
         void setCase(const chess::Position& position, std::unique_ptr<chess::Piece> piece);
         bool estEchec() const;
@@ -29,8 +30,13 @@ namespace ui {
 
         int turn;
 
+        QWidget* centralWidget ;
+        QHBoxLayout* mainWindow;
+        QVBoxLayout* chessBoard;
+
     private slots:
         void handleButtonClick(const chess::Position& position); // Slot to handle button clicks
+        void handleStartButton();
     };
 }
 
