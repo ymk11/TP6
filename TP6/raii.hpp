@@ -6,7 +6,6 @@
 #include "tour.hpp"
 #include "position.hpp"
 #include <memory>
-using namespace chess
 
 class RAII {
 public:
