@@ -9,9 +9,15 @@
 
 #include <memory>
 
+
 class RAII {
 public:
-	RAII();
-	~RAII();
+    RAII(Echiquier& echiquier, const Position& start, const Position& destination);
 
-}
+    ~RAII();
+
+private:
+    Echiquier& echiquier_;
+    Position start_;
+    Position destination_;
+};
