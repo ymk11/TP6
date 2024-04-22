@@ -98,7 +98,6 @@
     <ClCompile Include="position.cpp" />
     <ClCompile Include="raii.cpp" />
     <ClCompile Include="roi.cpp" />
-    <ClCompile Include="temporaryPieceWrapper.cpp" />
     <ClCompile Include="tour.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -110,7 +109,6 @@
     <ClInclude Include="position.hpp" />
     <ClInclude Include="raii.hpp" />
     <ClInclude Include="roi.hpp" />
-    <ClInclude Include="temporaryPieceWrapper.hpp" />
     <ClInclude Include="tour.hpp" />
     <ClInclude Include="typepiece.hpp" />
   </ItemGroup>

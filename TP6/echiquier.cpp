@@ -38,7 +38,7 @@ namespace ui {
                 if ((j+i) % 2 == 0) {
                     couleur = Couleur::Noir;
                 }
-                plateau_[i][j] = std::make_unique<Case>(couleur,Position(i,j),std::make_unique<Cavalier>(Couleur::Noir));
+                plateau_[i][j] = std::make_unique<Case>(couleur,Position(i,j));
                 plateau_[i][j]->setMinimumSize(140, 140);
 
                 
@@ -49,6 +49,10 @@ namespace ui {
             }
             chessBoard->addLayout(hBoxLayout);
         }
+        //piece temporaire pour le tp6
+        plateau_[3][4]->setPiece(std::make_unique<Roi>(Roi(Couleur::Blanc)));
+        plateau_[4][4]->setPiece(std::make_unique<Cavalier>(Cavalier(Couleur::Blanc)));
+        plateau_[3][3]->setPiece(std::make_unique<Tour>(Tour(Couleur::Noir)));
     }
 
     void Echiquier::initializeMenu() {
@@ -98,8 +102,16 @@ namespace ui {
     // La liste de position valide s'assurera que rien n'est hors position
 
     void Echiquier::handleButtonClick(const chess::Position& position) {
-        getCase(position).setPiece(nullptr);
         //fonction principale du jeu. Déclencher lors d'un click sur une case
+        if (lastSelected == nullptr) {
+            if (getCase(position).getPieceInfo() != nullptr) {
+                lastSelected = std::make_unique<chess::Position>(position);
+            } 
+        }
+        else {
+            moveTo(*lastSelected, position);
+            lastSelected = nullptr;
+        }
     }
     void Echiquier::handleStartButton() {
 

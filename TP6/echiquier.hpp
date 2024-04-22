@@ -26,7 +26,7 @@ namespace ui {
 
         std::vector<std::vector<std::unique_ptr<chess::Case>>> plateau_; // Représentation 2D du plateau
 
-        chess::Case lastSelected;
+        std::unique_ptr<chess::Position> lastSelected = nullptr;
 
         int turn;
 
