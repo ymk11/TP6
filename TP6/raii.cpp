@@ -1,8 +1,9 @@
 #include "RAII.hpp"
 
-RAII::RAII(Piece& piece, char new_position) : piece_(piece), old_position_(piece.position()) {
-	piece.setPosition(new_position);
+RAII::RAII() {
+	moveTo(const chess::Position & start, const chess::Position & destination);
 }
 RAII::~RAII() {
-	piece_.setPosition(old_position_);
+	moveTo(const chess::Position & destination, const chess::Position & start);
+
 }
