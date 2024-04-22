@@ -50,7 +50,7 @@
     <ClCompile Include="case.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="temporaryPieceWrapper.cpp">
+    <ClCompile Include="raii.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -76,7 +76,7 @@
     <ClInclude Include="kingException.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="temporaryPieceWrapper.hpp">
+    <ClInclude Include="raii.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
