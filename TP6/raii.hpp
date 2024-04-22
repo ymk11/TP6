@@ -12,12 +12,12 @@
 
 class RAII {
 public:
-    RAII(Echiquier& echiquier, const Position& start, const Position& destination);
+    RAII(ui::Echiquier& echiquier, const chess::Position& start, const chess::Position& destination);
 
     ~RAII();
 
 private:
-    Echiquier& echiquier_;
-    Position start_;
-    Position destination_;
+    ui::Echiquier& echiquier_;
+    chess::Position start_;
+    chess::Position destination_;
 };
