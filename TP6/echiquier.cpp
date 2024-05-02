@@ -100,16 +100,27 @@ namespace ui {
     //    return position.x >= 0 && position.x < 8 && position.y >= 0 && position.y < 8;
     //} 
     // La liste de position valide s'assurera que rien n'est hors position
-
-    void Echiquier::handleButtonClick(const chess::Position& position) {
-        //fonction principale du jeu. Déclencher lors d'un click sur une case
+    bool Echiquier::isValidClick(const chess::Position& position) {
         if (lastSelected == nullptr) {
             if (getCase(position).getPieceInfo() != nullptr) {
                 lastSelected = std::make_unique<chess::Position>(position);
-            } 
+                getCase(*lastSelected).setSelect(true);
+                
+            }
+            return false;
         }
-        else {
+        else if ( (lastSelected != nullptr) && (*lastSelected) == position) {
+            getCase(*lastSelected).setSelect(false);
+            lastSelected = nullptr;
+            return false; 
+        }
+        return true;
+    }
+    void Echiquier::handleButtonClick(const chess::Position& position) {
+        //fonction principale du jeu. Déclencher lors d'un click sur une case
+        if (isValidClick(position)) {
             moveTo(*lastSelected, position);
+            getCase(*lastSelected).setSelect(false);
             lastSelected = nullptr;
         }
     }
@@ -118,3 +129,4 @@ namespace ui {
     }
 
 }
+

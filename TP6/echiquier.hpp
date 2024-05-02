@@ -34,6 +34,8 @@ namespace ui {
         QHBoxLayout* mainWindow;
         QVBoxLayout* chessBoard;
 
+        bool isValidClick(const chess::Position& position);
+
     private slots:
         void handleButtonClick(const chess::Position& position); // Slot to handle button clicks
         void handleStartButton();

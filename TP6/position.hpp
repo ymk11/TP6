@@ -12,9 +12,11 @@ namespace chess {
         int getY() const;
         void setX(int x);
         void setY(int y);
+        bool operator==(const Position other);
     private:
         int x_;
         int y_;
+       
     };
 }
 
