@@ -18,7 +18,7 @@ namespace chess {
 
 	void Position::setY(int y) { y_ = y; }
 
-	bool Position::estValide() const { return (x_ >= 0) && (x_ <= 8) && (y_ >= 0) && (y_ <= 8); }
+	bool Position::estValide() const { return (x_ >= 0) && (x_ <= 7) && (y_ >= 0) && (y_ <= 7); }
 
 	bool Position::operator==(const Position& other) const { return (x_ == other.x_) && (y_ == other.y_); }
 
