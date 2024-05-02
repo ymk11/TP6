@@ -105,11 +105,12 @@ namespace ui {
             if (getCase(position).getPieceInfo() != nullptr) {
                 lastSelected = std::make_unique<chess::Position>(position);
                 getCase(*lastSelected).setSelect(true);
-                
+                selectPostions(true);
             }
             return false;
         }
         else if ( (lastSelected != nullptr) && (*lastSelected) == position) {
+            selectPostions(false);
             getCase(*lastSelected).setSelect(false);
             lastSelected = nullptr;
             return false; 
@@ -119,13 +120,25 @@ namespace ui {
     void Echiquier::handleButtonClick(const chess::Position& position) {
         //fonction principale du jeu. Déclencher lors d'un click sur une case
         if (isValidClick(position)) {
+            selectPostions(false);
             moveTo(*lastSelected, position);
             getCase(*lastSelected).setSelect(false);
             lastSelected = nullptr;
+            
         }
     }
     void Echiquier::handleStartButton() {
 
+    }
+    bool Echiquier::isColor(chess::Couleur color, const chess::Position& position) {
+        return getCase(position).getPieceInfo()->getCouleur() == color;
+    }
+    
+    void Echiquier::selectPostions( bool select) {
+        std::unordered_set<chess::Position,chess::PositionHash> positions = getCase(*lastSelected).getPieceInfo()->getListeDeplacements(*lastSelected, *this);
+        for (auto position : positions) {
+            getCase(position).setSelect(select);
+        }
     }
 
 }

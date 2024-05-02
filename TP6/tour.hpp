@@ -1,5 +1,5 @@
 #pragma once
-#include "Piece.hpp" 
+#include "Piece.hpp"
 #include <iostream>
 
 namespace chess {
@@ -7,7 +7,7 @@ namespace chess {
 	public:
 		Tour(Couleur couleur);
 
-		std::vector<Position> getListeDeplacements(const Position& depart, const ui::Echiquier&) const override;
+		std::unordered_set<Position, PositionHash> getListeDeplacements(const Position& depart,  ui::Echiquier&) const override;
 
 	};
 }

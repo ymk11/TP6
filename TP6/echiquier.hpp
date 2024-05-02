@@ -20,8 +20,8 @@ namespace ui {
         bool estEchec() const;
         bool isEmptyCase(const chess::Position& position) ;
         void moveTo(const chess::Position& start, const chess::Position& destination);
-
-
+        bool isColor(chess::Couleur color, const chess::Position& position) ;
+        void selectPostions( bool select);
     private:
 
         std::vector<std::vector<std::unique_ptr<chess::Case>>> plateau_; // Représentation 2D du plateau

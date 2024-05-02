@@ -1,27 +1,36 @@
-﻿#include "cavalier.hpp"
+﻿#pragma once
+#include "cavalier.hpp"
+#include "echiquier.hpp"
+#include <ranges>
+
 
 namespace chess {
     Cavalier::Cavalier(Couleur couleur) : Piece(TypePiece::Cavalier,
         couleur, "..\\assets\\nd.png", "..\\assets\\nl.png") {}
 
-    //bool Cavalier::estDeplacementValide(const Position& depart, const Position& arrivee) const  {
-    //    // vérifier si le déplacement correspond au mouvement du cavalier (deux cases dans une direction et une case dans l'autre)
-    //    int differencex = abs(arrivee.getX() - depart.getX());
-    //    int differencey = abs(arrivee.getY() - depart.getY());
-    //
-    //    if ((differencex == 2 && differencey == 1) || (differencex == 1 && differencey == 2)) {
-    //        return true;
-    //    }
-    //    else {
-    //        return false;
-    //    }
-    //    //Piece* piecearrivee = echiquier.getpiece(arrivee);
-    //    //return piecearrivee == nullptr || piecearrivee->getcouleur() != this->getcouleur();
-    //    return 0;
-    //}
+   
 
-    std::vector<Position> Cavalier::getListeDeplacements(const Position& départ, const ui::Echiquier&) const {
-        std::vector<Position> vect;
-        return vect;
+    std::unordered_set<Position, PositionHash> Cavalier::getListeDeplacements(const Position& start,  ui::Echiquier& echiquier) const {
+        std::unordered_set<Position, PositionHash> positions;
+        positions.insert(Position(start.getX()+2, start.getY()+1));
+        positions.insert(Position(start.getX()+1, start.getY() +2));
+        positions.insert(Position(start.getX()+2, start.getY()-1));
+        positions.insert(Position(start.getX()+1, start.getY()-2));
+
+        positions.insert(Position(start.getX()-2, start.getY()-1));
+        positions.insert(Position(start.getX()-1, start.getY()-2));
+        positions.insert(Position(start.getX()-2, start.getY()+1));
+        positions.insert(Position(start.getX()-1, start.getY()+2));
+        erase_if(positions, [&echiquier, this] (const Position& pos) {
+            if (pos.estValide()) {
+                if (!echiquier.isEmptyCase(pos)) {
+                    return echiquier.isColor(Piece::getCouleur(), pos);
+                }
+                return false;
+            } 
+            return true;
+            
+            });
+        return positions;
     }
 }

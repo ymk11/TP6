@@ -2,9 +2,10 @@
 #include "couleur.hpp"
 #include "typepiece.hpp"
 #include "position.hpp"
-#include <vector>
+#include <unordered_set>
 #include <string>
 #include <QString>
+#include <algorithm>
 
 namespace ui {
     class Echiquier;
@@ -23,7 +24,7 @@ namespace chess {
         virtual const TypePiece& getTypePiece() const;
         virtual const Couleur& getCouleur() const;
         virtual  const QString& getImage() const;
-        virtual std::vector<Position> getListeDeplacements(const Position& depart, const ui::Echiquier&) const = 0;
+        virtual std::unordered_set <Position, PositionHash> getListeDeplacements(const Position& depart, ui::Echiquier& echiquier) const = 0;
 
     private:
         TypePiece type_;

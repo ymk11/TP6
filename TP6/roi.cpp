@@ -23,8 +23,8 @@ namespace chess {
     //    return false;
     //}
 
-    std::vector<Position> Roi::getListeDeplacements(const Position& depart, const ui::Echiquier&) const {
-        std::vector<Position> vect;
+    std::unordered_set<Position, PositionHash> Roi::getListeDeplacements(const Position& depart,  ui::Echiquier&) const {
+        std::unordered_set<Position, PositionHash> vect;
         return vect;
     }
     Roi::~Roi() {

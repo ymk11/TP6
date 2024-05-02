@@ -26,8 +26,8 @@ namespace chess {
     //    return true;
     //}
 
-    std::vector<Position> Tour::getListeDeplacements(const Position& départ, const ui::Echiquier&) const {
-        std::vector<Position> vect;
+    std::unordered_set<Position, PositionHash> Tour::getListeDeplacements(const Position& départ,  ui::Echiquier&) const {
+        std::unordered_set<Position, PositionHash> vect;
         return vect;
     }
 }

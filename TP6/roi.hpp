@@ -8,7 +8,7 @@ namespace chess {
         Roi(Couleur couleur);
         ~Roi();
 
-        std::vector<Position> getListeDeplacements(const Position& depart, const ui::Echiquier&) const override;
+        std::unordered_set<Position, PositionHash> getListeDeplacements(const Position& depart,  ui::Echiquier&) const override;
     private:
         static int instanceCount_;
 
