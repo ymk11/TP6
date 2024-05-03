@@ -2,11 +2,11 @@
 #include "echiquier.hpp"
 namespace chess {
 
-    Tour::Tour(Couleur couleur) : Piece(TypePiece::Tour, couleur,
+    Tower::Tower(Couleur couleur) : Piece(TypePiece::Tower, couleur,
         "..\\assets\\rd.png", "..\\assets\\rl.png") {}
 
 
-    std::unordered_set<Position, PositionHash> Tour::getListeDeplacements(const Position& start,  ui::Echiquier& echiquier) const {
+    std::unordered_set<Position, PositionHash> Tower::getMovementsList(const Position& start,  ui::Board& echiquier) const {
         std::unordered_set<Position, PositionHash> positions;
         std::vector<Position> displacementList{ Position(1,0), Position(-1,0) , Position(0,1), Position(0,-1) };
         for (auto disp : displacementList) {
@@ -20,7 +20,7 @@ namespace chess {
                    
                 }
                 else if (!echiquier.isEmptyCase(futurPosition)) {
-                    if (!echiquier.isColor(Piece::getCouleur(), futurPosition)) {
+                    if (!echiquier.isColor(Piece::getColor(), futurPosition)) {
                         positions.insert(futurPosition);
                     }
                     flag = false;

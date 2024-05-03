@@ -7,7 +7,7 @@ namespace chess {
 	Case::Case(const Couleur& color, const Position& position, std::unique_ptr<Piece> piece, QWidget* parent) :
 		QPushButton(), position_(position), piece_(std::move(piece)) {
 		connect(this, &QPushButton::clicked, this, &Case::onClicked);
-		if (color == Couleur::Blanc) {
+		if (color == Couleur::White) {
 			style_ = ("QPushButton {"
 				"    background-color: darkgreen;"
 				"    border: none;"
@@ -63,5 +63,12 @@ namespace chess {
 		}
 
 		
+	}
+	void Case::turnRed() {
+		QPushButton::setStyleSheet("QPushButton {"
+			"    background-color: red;"
+			"    border: none;"
+			"    color: white;"
+			"}");
 	}
 }

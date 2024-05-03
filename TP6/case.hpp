@@ -20,6 +20,7 @@ namespace chess {
         const Position& getPosition() const;
         void updateAppearance();
         void setSelect(bool select);
+        void turnRed();
 
 
     signals:

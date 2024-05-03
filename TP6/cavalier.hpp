@@ -5,10 +5,10 @@
 
 
 namespace chess {
-	class Cavalier : public Piece {
+	class Knight : public Piece {
 	public:
-		Cavalier(Couleur couleur);
-		std::unordered_set<Position, PositionHash> getListeDeplacements(const Position& depart, ui::Echiquier&) const override;
+		Knight(Couleur color);
+		std::unordered_set<Position, PositionHash> getMovementsList(const Position& start, ui::Board& board) const override;
 
 	};
 }

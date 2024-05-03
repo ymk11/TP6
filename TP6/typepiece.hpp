@@ -3,9 +3,9 @@
 
 namespace chess {
     enum class TypePiece {
-        Roi,
-        Tour,
-        Cavalier,
+        King,
+        Tower,
+        Knight,
     };
 }
 

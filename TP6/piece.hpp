@@ -8,7 +8,7 @@
 #include <algorithm>
 
 namespace ui {
-    class Echiquier;
+    class Board;
 }
 
 namespace chess {
@@ -22,13 +22,13 @@ namespace chess {
         virtual ~Piece() = default;
 
         virtual const TypePiece& getTypePiece() const;
-        virtual const Couleur& getCouleur() const;
+        virtual const Couleur& getColor() const;
         virtual  const QString& getImage() const;
-        virtual std::unordered_set <Position, PositionHash> getListeDeplacements(const Position& depart, ui::Echiquier& echiquier) const = 0;
+        virtual std::unordered_set <Position, PositionHash> getMovementsList(const Position& depart, ui::Board& echiquier) const = 0;
 
     private:
         TypePiece type_;
-        Couleur couleur_;
+        Couleur color_;
         QString image_;
     };
 }

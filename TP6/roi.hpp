@@ -3,12 +3,12 @@
 #include <iostream>
 
 namespace chess {
-    class Roi : public Piece {
+    class King : public Piece {
     public:
-        Roi(Couleur couleur);
-        ~Roi();
+        King(Couleur color);
+        ~King();
 
-        std::unordered_set<Position, PositionHash> getListeDeplacements(const Position& depart,  ui::Echiquier&) const override;
+        std::unordered_set<Position, PositionHash> getMovementsList(const Position& start,  ui::Board&) const override;
     private:
         static int instanceCount_;
 

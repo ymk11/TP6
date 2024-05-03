@@ -5,12 +5,12 @@
 
 
 namespace chess {
-    Cavalier::Cavalier(Couleur couleur) : Piece(TypePiece::Cavalier,
+    Knight::Knight(Couleur couleur) : Piece(TypePiece::Knight,
         couleur, "..\\assets\\nd.png", "..\\assets\\nl.png") {}
 
    
 
-    std::unordered_set<Position, PositionHash> Cavalier::getListeDeplacements(const Position& start,  ui::Echiquier& echiquier) const {
+    std::unordered_set<Position, PositionHash> Knight::getMovementsList(const Position& start,  ui::Board& echiquier) const {
         std::unordered_set<Position, PositionHash> positions;
         positions.insert(Position(start.getX()+2, start.getY()+1));
         positions.insert(Position(start.getX()+1, start.getY() +2));
@@ -24,7 +24,7 @@ namespace chess {
         erase_if(positions, [&echiquier, this] (const Position& pos) {
             if (pos.estValide()) {
                 if (!echiquier.isEmptyCase(pos)) {
-                    return echiquier.isColor(Piece::getCouleur(), pos);
+                    return echiquier.isColor(Piece::getColor(), pos);
                 }
                 return false;
             } 

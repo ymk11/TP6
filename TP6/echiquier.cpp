@@ -3,22 +3,24 @@
 #include "tour.hpp"
 #include "cavalier.hpp"
 #include "QLabel"
+#include <QRadioButton>
+#include <QMessageBox>
 
 
 
 namespace ui {
-    Echiquier::Echiquier(QWidget* parent) : QMainWindow(parent) {
-        centralWidget = new QWidget();
-        mainWindow = new QHBoxLayout(this);
-        mainWindow->setSpacing(55);
-        mainWindow->setContentsMargins(QMargins(15,15,50,15));
-        setCentralWidget(centralWidget);
-        centralWidget->setLayout(mainWindow);
+    Board::Board(QWidget* parent) : QMainWindow(parent) {
+        centralWidget_ = new QWidget();
+        mainWindow_ = new QHBoxLayout(this);
+        mainWindow_->setSpacing(55);
+        mainWindow_->setContentsMargins(QMargins(15,15,50,15));
+        setCentralWidget(centralWidget_);
+        centralWidget_->setLayout(mainWindow_);
         initializeBoard();
         initializeMenu();
     }
 
-    void Echiquier::initializeBoard() { //initialiser l'UI
+    void Board::initializeBoard() { 
         using namespace chess;
         plateau_.resize(8);
         for (int i = 0; i < 8; ++i) {
@@ -26,121 +28,165 @@ namespace ui {
         }
 
         setWindowTitle(" Chess Game");
-        chessBoard = new QVBoxLayout() ;
-        chessBoard->setSpacing(0);
-        mainWindow->addLayout(chessBoard);
+        chessBoard_ = new QVBoxLayout() ;
+        chessBoard_->setSpacing(0);
+        mainWindow_->addLayout(chessBoard_);
         for (int i = 0; i < 8; i++) {
             QHBoxLayout* hBoxLayout = new QHBoxLayout();
             hBoxLayout->setSpacing(0);
 
             for (int j = 0; j < 8; j++) {
-                Couleur couleur = Couleur::Blanc;
+                Couleur couleur = Couleur::White;
                 if ((j+i) % 2 == 0) {
-                    couleur = Couleur::Noir;
+                    couleur = Couleur::Black;
                 }
                 plateau_[i][j] = std::make_unique<Case>(couleur,Position(i,j));
                 plateau_[i][j]->setMinimumSize(140, 140);
 
                 
-                connect(plateau_[i][j].get(), &Case::caseClicked, this, &Echiquier::handleButtonClick);
+                connect(plateau_[i][j].get(), &Case::caseClicked, this, &Board::handleButtonClick);
 
                 
                 hBoxLayout->addWidget(plateau_[i][j].get());
             }
-            chessBoard->addLayout(hBoxLayout);
+            chessBoard_->addLayout(hBoxLayout);
         }
-        //piece temporaire pour le tp6
-        plateau_[3][4]->setPiece(std::make_unique<Roi>(Roi(Couleur::Blanc)), true);
-        plateau_[6][2]->setPiece(std::make_unique<Roi>(Roi(Couleur::Noir)), true);
-        plateau_[7][7]->setPiece(std::make_unique<Cavalier>(Cavalier(Couleur::Blanc)), true);
-        plateau_[0][0]->setPiece(std::make_unique<Tour>(Tour(Couleur::Noir)), true);
-        plateau_[1][0]->setPiece(std::make_unique<Tour>(Tour(Couleur::Noir)), true);
-        plateau_[2][0]->setPiece(std::make_unique<Tour>(Tour(Couleur::Noir)), true);
-        plateau_[3][0]->setPiece(std::make_unique<Tour>(Tour(Couleur::Noir)), true);
-        plateau_[3][1]->setPiece(std::make_unique<Tour>(Tour(Couleur::Noir)), true);
     }
 
-    void Echiquier::initializeMenu() {
+    void Board::initializeMenu() {
         QVBoxLayout* menuBox = new QVBoxLayout();
         menuBox->setAlignment(Qt::AlignTop);
 
-        QPushButton* startButton = new QPushButton("Start");
+        QPushButton* startButton = new QPushButton("Start Game");
+        QPushButton* endButton = new QPushButton("End Game");
+
+        connect(startButton, &QPushButton::clicked, this, &Board::handleStartButton);
+        connect(endButton, &QPushButton::clicked, [this]() {
+            if (gameInProgress_) {
+                
+                if ((lastSelected_ != nullptr)) {
+                    selectPostions(false);
+                    getCase(*lastSelected_).setSelect(false);
+                }
+                else if (turnedRed_) { getCase(redPosition_).setSelect(false); }
+                ready_ = false;
+                checkMate_ = true;
+                QMessageBox::information(nullptr, "Information", "Game ended!");
+            }
+            });
         menuBox->addWidget(startButton);
+
+
         startButton->setMinimumSize(200, 30);
-        mainWindow->addLayout(menuBox);
+        endButton->setMinimumSize(200, 30);
+
+        mainWindow_->addLayout(menuBox);
 
         QVBoxLayout* labelBox = new QVBoxLayout();
-        QLabel* label= new QLabel("Select starting board");
+        QLabel* label = new QLabel("Select starting board");
         labelBox->setAlignment(Qt::AlignCenter);
         labelBox->addWidget(label);
+
+
         menuBox->addLayout(labelBox);
+
+ 
+        QVBoxLayout* optionsLayout = new QVBoxLayout();
+        QStringList options = { "Board 1", "Board 2", "Board 3", "Board 4" };
+
+        for (const QString& option : options) {
+            QRadioButton* radioButton = new QRadioButton(option);
+            optionsLayout->addWidget(radioButton);
+            connect(radioButton, &QRadioButton::toggled, [option, this]() {
+                if (checkMate_) {
+                    int choice = 0;
+                    if (option == "Board 2") {
+                        choice = 1;
+
+                    }
+                    else if (option == "Board 3") {
+                        choice = 2;
+
+                    }
+                    else if (option == "Board 4") {
+                        choice = 3;
+
+                    }
+                    setBoard(choice);
+                }
+                });
+        }
+
+
+        labelBox->addLayout(optionsLayout);
+        menuBox->addWidget(endButton);
+
         
     }
 
-    chess::Case& Echiquier::getCase(const chess::Position& position) {
+    chess::Case& Board::getCase(const chess::Position& position) {
         return *plateau_[position.getX()][position.getY()];
     }
 
-    void Echiquier::setCase(const chess::Position& position, std::unique_ptr<chess::Piece> piece) {
+    void Board::setCase(const chess::Position& position, std::unique_ptr<chess::Piece> piece) {
         getCase(position).setPiece(std::move(piece));
     }
 
-    bool Echiquier::isEmptyCase(const chess::Position& position) {
+    bool Board::isEmptyCase(const chess::Position& position) {
         return getCase(position).getPieceInfo() == nullptr;
 
     }
-    chess::Couleur Echiquier::getInverseColor(const chess::Couleur& color) {
-        return (color == chess::Couleur::Blanc) ? chess::Couleur::Noir : chess::Couleur::Blanc;
+    chess::Couleur Board::getInverseColor(const chess::Couleur& color) {
+        return (color == chess::Couleur::White) ? chess::Couleur::Black : chess::Couleur::White;
     }
-    chess::Position Echiquier::kingPosition(const chess::Couleur& color) {
+    chess::Position Board::kingPosition(const chess::Couleur& color) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 chess::Position pos(i, j);
-                if ((getCase(pos).getPieceInfo() != nullptr) && (getCase(pos).getPieceInfo()->getCouleur() == color)
-                    && (getCase(pos).getPieceInfo()->getTypePiece() == chess::TypePiece::Roi)) {
+                if ((getCase(pos).getPieceInfo() != nullptr) && (getCase(pos).getPieceInfo()->getColor() == color)
+                    && (getCase(pos).getPieceInfo()->getTypePiece() == chess::TypePiece::King)) {
                     return pos;
                 }
 
             }
         }
- 
+        return {};
     }
     
-    bool Echiquier::isCheck(const chess::Couleur& color) {
+    bool Board::isCheck(const chess::Couleur& color) {
         std::unordered_set<chess::Position, chess::PositionHash> positions = getAllMovements(getInverseColor(color));
         bool val  = positions.find(kingPosition(color)) != positions.end();
         return val;
     }
-    bool Echiquier::isCheckMate() {
+    bool Board::isCheckMate() {
         std::unordered_set<chess::Position, chess::PositionHash> positions = getAllMovements(joueur_);
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 chess::Position postion(i, j);
-                if ((getCase(postion).getPieceInfo() != nullptr) && (getCase(postion).getPieceInfo()->getCouleur() == joueur_)) {
-                    lastSelected = std::make_unique<chess::Position>(postion);
+                if ((getCase(postion).getPieceInfo() != nullptr) && (getCase(postion).getPieceInfo()->getColor() == joueur_)) {
+                    lastSelected_ = std::make_unique<chess::Position>(postion);
                     if (!getFilteredMovement().empty()) {
-                        lastSelected = nullptr;
+                        lastSelected_ = nullptr;
                         return false;
                     }
                 }
             }
         }
-        std::cout << "end!!!!!!!!!!!!!!";
-        lastSelected = nullptr;
+        lastSelected_ = nullptr;
         return true;
     }
 
-    std::unordered_set<chess::Position, chess::PositionHash> Echiquier::getFilteredMovement() {
-        std::unordered_set<chess::Position, chess::PositionHash> positions = getCase(*lastSelected).getPieceInfo()->getListeDeplacements(*lastSelected, *this);
+    std::unordered_set<chess::Position, chess::PositionHash> Board::getFilteredMovement() {
+        std::unordered_set<chess::Position, chess::PositionHash> positions = getCase(*lastSelected_).getPieceInfo()->getMovementsList(*lastSelected_, *this);
         std::erase_if(positions, [&](const chess::Position& pos) {
             std::unique_ptr<chess::Piece> piece  = getCase(pos).getPiece();
-            moveTo(*lastSelected, pos);
+            moveTo(*lastSelected_, pos);
             if (isCheck(joueur_)) {
-                moveTo(pos, *lastSelected);
+                moveTo(pos, *lastSelected_);
                 getCase(pos).setPiece(std::move(piece));
                 return true; 
             }
-            moveTo(pos, *lastSelected);
+            moveTo(pos, *lastSelected_);
             getCase(pos).setPiece(std::move(piece));
             return false;
             });
@@ -149,72 +195,99 @@ namespace ui {
         
     }
 
-    void Echiquier::moveTo(const chess::Position& start, const chess::Position& destination, bool display ) {
+    void Board::moveTo(const chess::Position& start, const chess::Position& destination, bool display ) {
             getCase(destination).setPiece(getCase(start).getPiece(), display);
             getCase(start).setPiece(nullptr, display);
     }
-    void Echiquier::moveToValid(const chess::Position& start, const chess::Position& destination) {
+    void Board::moveToValid(const chess::Position& start, const chess::Position& destination) {
         std::unordered_set<chess::Position, chess::PositionHash> positions = getFilteredMovement();
         auto it = positions.find(destination);
         if (it != positions.end()) {
-        getCase(destination).setPiece(getCase(start).getPiece(), true);
-        getCase(start).setPiece(nullptr, true);
-        joueur_ = getInverseColor(joueur_);
-
+            getCase(destination).setPiece(getCase(start).getPiece(), true);
+            getCase(start).setPiece(nullptr, true);
+            joueur_ = getInverseColor(joueur_);
+            getCase(*lastSelected_).setSelect(false);
+            turnedRed_ = false;
+        }
+        else {
+            turnedRed_ = true;
+            redPosition_ = start;
+            getCase(start).turnRed();
         }
     }
 
   
-    bool Echiquier::isValidClick(const chess::Position& position) {
-        if (lastSelected == nullptr) {
-            if (getCase(position).getPieceInfo() != nullptr && getCase(position).getPieceInfo()->getCouleur() == joueur_) {
+    bool Board::isValidClick(const chess::Position& position) {
+        if (checkMate_) {return false; }
+        else if (lastSelected_ == nullptr) {
+            if (turnedRed_) { getCase(redPosition_).setSelect(false); }
+            if (getCase(position).getPieceInfo() != nullptr && getCase(position).getPieceInfo()->getColor() == joueur_) {
                 if (getCase(position).getPieceInfo() != nullptr) {
-                    lastSelected = std::make_unique<chess::Position>(position);
-                    getCase(*lastSelected).setSelect(true);
+                    lastSelected_ = std::make_unique<chess::Position>(position);
+                    getCase(*lastSelected_).setSelect(true);
                     selectPostions(true);
+                    gameInProgress_ = true;
                 }
             }
             return false;
         }
-        else if ( (lastSelected != nullptr) && (*lastSelected) == position) {
+
+        else if ( (lastSelected_ != nullptr) && (*lastSelected_) == position) {
             selectPostions(false);
-            getCase(*lastSelected).setSelect(false);
-            lastSelected = nullptr;
+            getCase(*lastSelected_).setSelect(false);
+            lastSelected_ = nullptr;
             return false; 
         }
+
+        else if ((getCase(position).getPieceInfo() != nullptr) &&
+            (getCase(position).getPieceInfo()->getColor() == getCase(*lastSelected_).getPieceInfo()->getColor())) {
+            getCase(*lastSelected_).setSelect(false);
+            selectPostions(false);
+            lastSelected_ = std::make_unique<chess::Position>(position);
+            getCase(*lastSelected_).setSelect(true);
+            selectPostions(true);
+            return false;
+        }
+
         return true;
     }
-    void Echiquier::handleButtonClick(const chess::Position& position) {
-        //fonction principale du jeu. Déclencher lors d'un click sur une case
-        if (isValidClick(position)) {
+    void Board::handleButtonClick(const chess::Position& position) {
+        if (isValidClick(position) ) {
             selectPostions(false);
-            moveToValid(*lastSelected, position);
-            getCase(*lastSelected).setSelect(false);
+            moveToValid(*lastSelected_, position);
             checkMate_ = isCheckMate();
-            lastSelected = nullptr;
+            lastSelected_ = nullptr;
+            if (checkMate_) {
+                endGame();
+            }
+            
             
         }
     }
-    void Echiquier::handleStartButton() {
-
+    void Board::handleStartButton() {
+        if (ready_) {
+            checkMate_ = false;
+            ready_ = false;
+            QMessageBox::information(nullptr, "Information", "The game has started!");
+        }
     }
-    bool Echiquier::isColor(chess::Couleur color, const chess::Position& position) {
-        return getCase(position).getPieceInfo()->getCouleur() == color;
+    bool Board::isColor(chess::Couleur color, const chess::Position& position) {
+        return getCase(position).getPieceInfo()->getColor() == color;
     }
     
-    void Echiquier::selectPostions( bool select) {
+    void Board::selectPostions( bool select) {
         std::unordered_set<chess::Position,chess::PositionHash> positions = getFilteredMovement();
         for (auto position : positions) {
             getCase(position).setSelect(select);
         }
     }
-    std::unordered_set<chess::Position, chess::PositionHash>  Echiquier::getAllMovements(const chess::Couleur& color) {
+    std::unordered_set<chess::Position, chess::PositionHash>  Board::getAllMovements(const chess::Couleur& color) {
         std::unordered_set<chess::Position, chess::PositionHash> positions;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 chess::Position pos(i, j);
-                if ((getCase(pos).getPieceInfo() != nullptr) &&getCase(pos).getPieceInfo()->getCouleur() == color) {
-                    std::unordered_set<chess::Position, chess::PositionHash> tempPositions = getCase(pos).getPieceInfo()->getListeDeplacements(pos, *this);
+                if ((getCase(pos).getPieceInfo() != nullptr) &&getCase(pos).getPieceInfo()->getColor() == color) {
+                    std::unordered_set<chess::Position, chess::PositionHash> tempPositions = getCase(pos).getPieceInfo()->getMovementsList(pos, *this);
                     std::copy(tempPositions.begin(), tempPositions.end(), std::inserter(positions, positions.end()));
                     
                 }
@@ -223,6 +296,78 @@ namespace ui {
         }
         return positions;
     }
+    void Board::emptyBoard() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                plateau_[i][j]->setPiece(nullptr, true);
+            }
+        }
 
+    }
+    void Board::setBoard(int modifier) {
+        using namespace chess;
+        using std::make_unique;
+        emptyBoard();
+        ready_ = true;
+        if (modifier == 0) {
+            plateau_[0][4]->setPiece(make_unique<King>(King(Couleur::Black)), true);
+            plateau_[1][5]->setPiece(make_unique<Knight>(Knight(Couleur::Black)), true);
+            plateau_[1][2]->setPiece(make_unique<Knight>(Knight(Couleur::Black)), true);
+            plateau_[0][0]->setPiece(make_unique<Tower>(Tower(Couleur::Black)), true);
+            plateau_[0][7]->setPiece(make_unique<Tower>(Tower(Couleur::Black)), true);
+
+            plateau_[7][4]->setPiece(make_unique<King>(King(Couleur::White)), true);
+            plateau_[6][5]->setPiece(make_unique<Knight>(Knight(Couleur::White)), true);
+            plateau_[6][2]->setPiece(make_unique<Knight>(Knight(Couleur::White)), true);
+            plateau_[7][0]->setPiece(make_unique<Tower>(Tower(Couleur::White)), true);
+            plateau_[7][7]->setPiece(make_unique<Tower>(Tower(Couleur::White)), true);
+        }
+        else if (modifier == 1) {
+            plateau_[0][1]->setPiece(make_unique<King>(King(Couleur::Black)), true);
+            plateau_[2][3]->setPiece(make_unique<Knight>(Knight(Couleur::Black)), true);
+            plateau_[1][2]->setPiece(make_unique<Knight>(Knight(Couleur::Black)), true);
+            plateau_[5][0]->setPiece(make_unique<Tower>(Tower(Couleur::Black)), true);
+            plateau_[0][7]->setPiece(make_unique<Tower>(Tower(Couleur::Black)), true);
+
+            plateau_[5][0]->setPiece(make_unique<King>(King(Couleur::White)), true);
+            plateau_[7][3]->setPiece(make_unique<Knight>(Knight(Couleur::White)), true);
+            plateau_[6][2]->setPiece(make_unique<Knight>(Knight(Couleur::White)), true);
+            plateau_[4][4]->setPiece(make_unique<Tower>(Tower(Couleur::White)), true);
+            plateau_[7][4]->setPiece(make_unique<Tower>(Tower(Couleur::White)), true);
+        }
+        else if (modifier == 2) {
+            plateau_[0][5]->setPiece(make_unique<King>(King(Couleur::Black)), true);
+            plateau_[3][5]->setPiece(make_unique<Knight>(Knight(Couleur::White)), true);
+            plateau_[3][2]->setPiece(make_unique<Knight>(Knight(Couleur::White)), true);
+            plateau_[1][0]->setPiece(make_unique<Tower>(Tower(Couleur::Black)), true);
+            plateau_[1][7]->setPiece(make_unique<Tower>(Tower(Couleur::Black)), true);
+
+            plateau_[7][5]->setPiece(make_unique<King>(King(Couleur::White)), true);
+            plateau_[4][5]->setPiece(make_unique<Knight>(Knight(Couleur::Black)), true);
+            plateau_[4][2]->setPiece(make_unique<Knight>(Knight(Couleur::Black)), true);
+            plateau_[7][1]->setPiece(make_unique<Tower>(Tower(Couleur::White)), true);
+            plateau_[6][6]->setPiece(make_unique<Tower>(Tower(Couleur::White)), true);
+        }
+        else if (modifier == 3) {
+            plateau_[0][5]->setPiece(make_unique<King>(King(Couleur::Black)), true);
+            plateau_[3][5]->setPiece(make_unique<Knight>(Knight(Couleur::Black)), true);
+            plateau_[3][2]->setPiece(make_unique<Knight>(Knight(Couleur::Black)), true);
+            plateau_[2][0]->setPiece(make_unique<Tower>(Tower(Couleur::Black)), true);
+            plateau_[2][7]->setPiece(make_unique<Tower>(Tower(Couleur::Black)), true);
+
+            plateau_[7][4]->setPiece(make_unique<King>(King(Couleur::White)), true);
+            plateau_[4][5]->setPiece(make_unique<Knight>(Knight(Couleur::White)), true);
+            plateau_[4][2]->setPiece(make_unique<Knight>(Knight(Couleur::White)), true);
+            plateau_[6][4]->setPiece(make_unique<Tower>(Tower(Couleur::White)), true);
+            plateau_[6][7]->setPiece(make_unique<Tower>(Tower(Couleur::White)), true);
+        }
+    }
+
+    void Board::endGame() {
+        ready_ = false;
+        QString winner = (joueur_ == chess::Couleur::White) ? "Black" : "White";
+        QMessageBox::information(nullptr, "Information", (winner + " won!"));
+
+    }
 }
 

@@ -2,8 +2,8 @@
 
 namespace chess {
     enum class Couleur {
-        Blanc,
-        Noir
+        White,
+        Black
     };
 }
 

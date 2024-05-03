@@ -12,9 +12,9 @@ void displayErrorBox() {
 	//example for exercise 2
 	try
 	{
-		chess::Roi r1(chess::Couleur::Blanc);
-		chess::Roi r2(chess::Couleur::Blanc);
-		chess::Roi r3(chess::Couleur::Blanc);
+		chess::King r1(chess::Couleur::White);
+		chess::King r2(chess::Couleur::White);
+		chess::King r3(chess::Couleur::White);
 
 
 
@@ -28,7 +28,7 @@ void displayErrorBox() {
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	ui::Echiquier echiquier;
+	ui::Board echiquier;
 	echiquier.show();
 	
 	

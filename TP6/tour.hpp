@@ -3,11 +3,11 @@
 #include <iostream>
 
 namespace chess {
-	class Tour : public Piece {
+	class Tower : public Piece {
 	public:
-		Tour(Couleur couleur);
+		Tower(Couleur color);
 
-		std::unordered_set<Position, PositionHash> getListeDeplacements(const Position& depart,  ui::Echiquier&) const override;
+		std::unordered_set<Position, PositionHash> getMovementsList(const Position& start,  ui::Board&) const override;
 
 	};
 }

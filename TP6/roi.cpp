@@ -4,9 +4,9 @@
 
 namespace chess {
 
-    int Roi::instanceCount_ = 0;
+    int King::instanceCount_ = 0;
 
-    Roi::Roi(Couleur couleur) : Piece(TypePiece::Roi, couleur,
+    King::King(Couleur couleur) : Piece(TypePiece::King, couleur,
         "..\\assets\\kd.png", "..\\assets\\kl.png") {
         instanceCount_++;
         if (instanceCount_ > 2) {
@@ -16,7 +16,7 @@ namespace chess {
 
    
 
-    std::unordered_set<Position, PositionHash> Roi::getListeDeplacements(const Position& start,  ui::Echiquier& echiquier) const {
+    std::unordered_set<Position, PositionHash> King::getMovementsList(const Position& start,  ui::Board& echiquier) const {
         std::unordered_set<Position, PositionHash> positions;
         std::vector<Position> displacementList = { Position(1, 0),
             Position(-1, 0),
@@ -30,13 +30,13 @@ namespace chess {
         for (auto disp : displacementList) {
             Position positionFutur(start.getX() + disp.getX(), start.getY() + disp.getY());
             if (positionFutur.estValide() &&
-                (echiquier.isEmptyCase(positionFutur) || !echiquier.isColor(Piece::getCouleur(), positionFutur))) {
+                (echiquier.isEmptyCase(positionFutur) || !echiquier.isColor(Piece::getColor(), positionFutur))) {
                 positions.insert(positionFutur);
             }
         }
         return positions;
     }
-    Roi::~Roi() {
+    King::~King() {
         instanceCount_--;
     }
 }
