@@ -29,6 +29,7 @@ namespace chess {
 		}
 		return *this;
 	}
+	
 
 	size_t PositionHash::operator()(const Position& position) const {
 		return std::hash<int>()(position.getX()) ^ (std::hash<int>()(position.getY()) << 1);

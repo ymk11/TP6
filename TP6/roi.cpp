@@ -1,4 +1,5 @@
 ﻿#include "roi.hpp"
+#include "echiquier.hpp"
 #include "kingException.hpp"
 
 namespace chess {
@@ -13,19 +14,27 @@ namespace chess {
         }
     }
 
-    //bool Roi::estDeplacementValide(const Position& depart, const Position& arrivee) const {
-    //
-    //    if (abs(depart.getX() - arrivee.getX()) <= 1 && abs(depart.getX() - arrivee.getY()) <= 1) {
-    //        return true;
-    //    }
-    //
-    //
-    //    return false;
-    //}
+   
 
-    std::unordered_set<Position, PositionHash> Roi::getListeDeplacements(const Position& depart,  ui::Echiquier&) const {
-        std::unordered_set<Position, PositionHash> vect;
-        return vect;
+    std::unordered_set<Position, PositionHash> Roi::getListeDeplacements(const Position& start,  ui::Echiquier& echiquier) const {
+        std::unordered_set<Position, PositionHash> positions;
+        std::vector<Position> displacementList = { Position(1, 0),
+            Position(-1, 0),
+            Position(0, 1),
+            Position(0, -1),
+            Position(1, 1),
+            Position(1, -1),
+            Position(-1, -1),
+            Position(-1, 1), };
+        
+        for (auto disp : displacementList) {
+            Position positionFutur(start.getX() + disp.getX(), start.getY() + disp.getY());
+            if (positionFutur.estValide() &&
+                (echiquier.isEmptyCase(positionFutur) || !echiquier.isColor(Piece::getCouleur(), positionFutur))) {
+                positions.insert(positionFutur);
+            }
+        }
+        return positions;
     }
     Roi::~Roi() {
         instanceCount_--;

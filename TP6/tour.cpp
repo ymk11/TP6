@@ -1,33 +1,36 @@
 ﻿#include "Tour.hpp"
-
+#include "echiquier.hpp"
 namespace chess {
 
     Tour::Tour(Couleur couleur) : Piece(TypePiece::Tour, couleur,
         "..\\assets\\rd.png", "..\\assets\\rl.png") {}
 
-    //bool Tour::estDeplacementValide(const Position& depart, const Position& arrivee)  const {
-    //
-    //    if (depart.getX() != arrivee.getX() && depart.getY() != arrivee.getY()) {
-    //        return false;
-    //    }
-    //
-    //
-    //    int directionX = (arrivee.getX() - depart.getX()) / abs(arrivee.getX() - depart.getX());
-    //    int directionY = (arrivee.getY() - depart.getY()) / abs(arrivee.getY() - depart.getY());
-    //    for (int i = 1; i < abs(arrivee.getX() - depart.getX()) || i < abs(arrivee.getY() - depart.getY()); ++i) {
-    //        Position caseIntermediaire(depart.getX() + i * directionX, depart.getY() + i * directionY);
-    //        //if (echiquier.getPiece(caseIntermediaire) != nullptr) {
-    //        //    return false;
-    //       // }
-    //    }
-    //
-    //   // Piece* pieceArrivee = echiquier.getPiece(arrivee);
-    //    //return pieceArrivee == nullptr || pieceArrivee->getCouleur() != this->getCouleur();
-    //    return true;
-    //}
 
-    std::unordered_set<Position, PositionHash> Tour::getListeDeplacements(const Position& départ,  ui::Echiquier&) const {
-        std::unordered_set<Position, PositionHash> vect;
-        return vect;
+    std::unordered_set<Position, PositionHash> Tour::getListeDeplacements(const Position& start,  ui::Echiquier& echiquier) const {
+        std::unordered_set<Position, PositionHash> positions;
+        std::vector<Position> displacementList{ Position(1,0), Position(-1,0) , Position(0,1), Position(0,-1) };
+        for (auto disp : displacementList) {
+            int j = 1;
+            bool flag = true;
+            while ((j <= 7) && flag) {
+                Position futurPosition = Position(start.getX() + j * disp.getX(),
+                    start.getY() + j * disp.getY());
+                if (!futurPosition.estValide()) {
+                    flag = false;
+                   
+                }
+                else if (!echiquier.isEmptyCase(futurPosition)) {
+                    if (!echiquier.isColor(Piece::getCouleur(), futurPosition)) {
+                        positions.insert(futurPosition);
+                    }
+                    flag = false;
+                }
+                else {
+                    positions.insert(futurPosition);
+                }
+                j++;
+            }
+        }
+        return positions;
     }
 }

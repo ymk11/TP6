@@ -50,9 +50,14 @@ namespace ui {
             chessBoard->addLayout(hBoxLayout);
         }
         //piece temporaire pour le tp6
-        plateau_[3][4]->setPiece(std::make_unique<Roi>(Roi(Couleur::Blanc)));
-        plateau_[4][4]->setPiece(std::make_unique<Cavalier>(Cavalier(Couleur::Blanc)));
-        plateau_[3][3]->setPiece(std::make_unique<Tour>(Tour(Couleur::Noir)));
+        plateau_[3][4]->setPiece(std::make_unique<Roi>(Roi(Couleur::Blanc)), true);
+        plateau_[6][2]->setPiece(std::make_unique<Roi>(Roi(Couleur::Noir)), true);
+        plateau_[7][7]->setPiece(std::make_unique<Cavalier>(Cavalier(Couleur::Blanc)), true);
+        plateau_[0][0]->setPiece(std::make_unique<Tour>(Tour(Couleur::Noir)), true);
+        plateau_[1][0]->setPiece(std::make_unique<Tour>(Tour(Couleur::Noir)), true);
+        plateau_[2][0]->setPiece(std::make_unique<Tour>(Tour(Couleur::Noir)), true);
+        plateau_[3][0]->setPiece(std::make_unique<Tour>(Tour(Couleur::Noir)), true);
+        plateau_[3][1]->setPiece(std::make_unique<Tour>(Tour(Couleur::Noir)), true);
     }
 
     void Echiquier::initializeMenu() {
@@ -84,28 +89,90 @@ namespace ui {
         return getCase(position).getPieceInfo() == nullptr;
 
     }
-
-
-
-    bool Echiquier::estEchec() const {
-        // to do ...
-        return 0;
+    chess::Couleur Echiquier::getInverseColor(const chess::Couleur& color) {
+        return (color == chess::Couleur::Blanc) ? chess::Couleur::Noir : chess::Couleur::Blanc;
     }
-    void Echiquier::moveTo(const chess::Position& start, const chess::Position& destination) {
-        getCase(destination).setPiece(getCase(start).getPiece());
-        getCase(start).setPiece(nullptr);
+    chess::Position Echiquier::kingPosition(const chess::Couleur& color) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                chess::Position pos(i, j);
+                if ((getCase(pos).getPieceInfo() != nullptr) && (getCase(pos).getPieceInfo()->getCouleur() == color)
+                    && (getCase(pos).getPieceInfo()->getTypePiece() == chess::TypePiece::Roi)) {
+                    return pos;
+                }
+
+            }
+        }
+ 
+    }
+    
+    bool Echiquier::isCheck(const chess::Couleur& color) {
+        std::unordered_set<chess::Position, chess::PositionHash> positions = getAllMovements(getInverseColor(color));
+        bool val  = positions.find(kingPosition(color)) != positions.end();
+        return val;
+    }
+    bool Echiquier::isCheckMate() {
+        std::unordered_set<chess::Position, chess::PositionHash> positions = getAllMovements(joueur_);
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                chess::Position postion(i, j);
+                if ((getCase(postion).getPieceInfo() != nullptr) && (getCase(postion).getPieceInfo()->getCouleur() == joueur_)) {
+                    lastSelected = std::make_unique<chess::Position>(postion);
+                    if (!getFilteredMovement().empty()) {
+                        lastSelected = nullptr;
+                        return false;
+                    }
+                }
+            }
+        }
+        std::cout << "end!!!!!!!!!!!!!!";
+        lastSelected = nullptr;
+        return true;
     }
 
-    //bool echiquier::estdanslimitesechiquier(const position& position) const {
-    //    return position.x >= 0 && position.x < 8 && position.y >= 0 && position.y < 8;
-    //} 
-    // La liste de position valide s'assurera que rien n'est hors position
+    std::unordered_set<chess::Position, chess::PositionHash> Echiquier::getFilteredMovement() {
+        std::unordered_set<chess::Position, chess::PositionHash> positions = getCase(*lastSelected).getPieceInfo()->getListeDeplacements(*lastSelected, *this);
+        std::erase_if(positions, [&](const chess::Position& pos) {
+            std::unique_ptr<chess::Piece> piece  = getCase(pos).getPiece();
+            moveTo(*lastSelected, pos);
+            if (isCheck(joueur_)) {
+                moveTo(pos, *lastSelected);
+                getCase(pos).setPiece(std::move(piece));
+                return true; 
+            }
+            moveTo(pos, *lastSelected);
+            getCase(pos).setPiece(std::move(piece));
+            return false;
+            });
+        return positions;
+
+        
+    }
+
+    void Echiquier::moveTo(const chess::Position& start, const chess::Position& destination, bool display ) {
+            getCase(destination).setPiece(getCase(start).getPiece(), display);
+            getCase(start).setPiece(nullptr, display);
+    }
+    void Echiquier::moveToValid(const chess::Position& start, const chess::Position& destination) {
+        std::unordered_set<chess::Position, chess::PositionHash> positions = getFilteredMovement();
+        auto it = positions.find(destination);
+        if (it != positions.end()) {
+        getCase(destination).setPiece(getCase(start).getPiece(), true);
+        getCase(start).setPiece(nullptr, true);
+        joueur_ = getInverseColor(joueur_);
+
+        }
+    }
+
+  
     bool Echiquier::isValidClick(const chess::Position& position) {
         if (lastSelected == nullptr) {
-            if (getCase(position).getPieceInfo() != nullptr) {
-                lastSelected = std::make_unique<chess::Position>(position);
-                getCase(*lastSelected).setSelect(true);
-                selectPostions(true);
+            if (getCase(position).getPieceInfo() != nullptr && getCase(position).getPieceInfo()->getCouleur() == joueur_) {
+                if (getCase(position).getPieceInfo() != nullptr) {
+                    lastSelected = std::make_unique<chess::Position>(position);
+                    getCase(*lastSelected).setSelect(true);
+                    selectPostions(true);
+                }
             }
             return false;
         }
@@ -121,8 +188,9 @@ namespace ui {
         //fonction principale du jeu. Déclencher lors d'un click sur une case
         if (isValidClick(position)) {
             selectPostions(false);
-            moveTo(*lastSelected, position);
+            moveToValid(*lastSelected, position);
             getCase(*lastSelected).setSelect(false);
+            checkMate_ = isCheckMate();
             lastSelected = nullptr;
             
         }
@@ -135,10 +203,25 @@ namespace ui {
     }
     
     void Echiquier::selectPostions( bool select) {
-        std::unordered_set<chess::Position,chess::PositionHash> positions = getCase(*lastSelected).getPieceInfo()->getListeDeplacements(*lastSelected, *this);
+        std::unordered_set<chess::Position,chess::PositionHash> positions = getFilteredMovement();
         for (auto position : positions) {
             getCase(position).setSelect(select);
         }
+    }
+    std::unordered_set<chess::Position, chess::PositionHash>  Echiquier::getAllMovements(const chess::Couleur& color) {
+        std::unordered_set<chess::Position, chess::PositionHash> positions;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                chess::Position pos(i, j);
+                if ((getCase(pos).getPieceInfo() != nullptr) &&getCase(pos).getPieceInfo()->getCouleur() == color) {
+                    std::unordered_set<chess::Position, chess::PositionHash> tempPositions = getCase(pos).getPieceInfo()->getListeDeplacements(pos, *this);
+                    std::copy(tempPositions.begin(), tempPositions.end(), std::inserter(positions, positions.end()));
+                    
+                }
+               
+            }
+        }
+        return positions;
     }
 
 }

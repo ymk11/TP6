@@ -17,18 +17,25 @@ namespace ui {
         void initializeMenu();
         chess::Case& getCase(const chess::Position& position) ;
         void setCase(const chess::Position& position, std::unique_ptr<chess::Piece> piece);
-        bool estEchec() const;
         bool isEmptyCase(const chess::Position& position) ;
-        void moveTo(const chess::Position& start, const chess::Position& destination);
+        void moveTo(const chess::Position& start, const chess::Position& destination, bool display = false);
+        void moveToValid(const chess::Position& start, const chess::Position& destination);
         bool isColor(chess::Couleur color, const chess::Position& position) ;
         void selectPostions( bool select);
+        std::unordered_set<chess::Position, chess::PositionHash>getAllMovements(const chess::Couleur& color);
+        bool isCheck(const chess::Couleur& color);
+        bool isCheckMate();
+        chess::Position kingPosition(const chess::Couleur& color);
+        std::unordered_set<chess::Position, chess::PositionHash> getFilteredMovement();
+        chess::Couleur getInverseColor(const chess::Couleur& color);
     private:
 
         std::vector<std::vector<std::unique_ptr<chess::Case>>> plateau_; // Représentation 2D du plateau
 
         std::unique_ptr<chess::Position> lastSelected = nullptr;
 
-        int turn;
+        chess::Couleur joueur_ = chess::Couleur::Blanc;
+        bool checkMate_ = false;
 
         QWidget* centralWidget ;
         QHBoxLayout* mainWindow;

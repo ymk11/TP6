@@ -27,9 +27,9 @@ namespace chess {
 	Case::Case(const Couleur& color, const Position& position, QWidget* parent) :
 		Case(color, position, nullptr, parent) {}
 
-	void Case::setPiece(std::unique_ptr<Piece> newPiece) {
+	void Case::setPiece(std::unique_ptr<Piece> newPiece, bool update) {
 		piece_ = std::move(newPiece);
-		updateAppearance();
+		if (update) { updateAppearance(); }
 	}
 
 	const std::unique_ptr<Piece>& Case::getPieceInfo()const { return piece_; }
