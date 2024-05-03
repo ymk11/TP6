@@ -1,12 +1,12 @@
-﻿#include "roi.hpp"
-#include "echiquier.hpp"
+﻿#include "king.hpp"
+#include "board.hpp"
 #include "kingException.hpp"
 
 namespace chess {
 
     int King::instanceCount_ = 0;
 
-    King::King(Couleur couleur) : Piece(TypePiece::King, couleur,
+    King::King(Color couleur) : Piece(TypePiece::King, couleur,
         "..\\assets\\kd.png", "..\\assets\\kl.png") {
         instanceCount_++;
         if (instanceCount_ > 2) {

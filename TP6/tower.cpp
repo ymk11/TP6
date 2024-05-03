@@ -1,8 +1,8 @@
-﻿#include "Tour.hpp"
-#include "echiquier.hpp"
+﻿#include "tower.hpp"
+#include "board.hpp"
 namespace chess {
 
-    Tower::Tower(Couleur couleur) : Piece(TypePiece::Tower, couleur,
+    Tower::Tower(Color couleur) : Piece(TypePiece::Tower, couleur,
         "..\\assets\\rd.png", "..\\assets\\rl.png") {}
 
 

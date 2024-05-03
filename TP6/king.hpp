@@ -5,7 +5,7 @@
 namespace chess {
     class King : public Piece {
     public:
-        King(Couleur color);
+        King(Color color);
         ~King();
 
         std::unordered_set<Position, PositionHash> getMovementsList(const Position& start,  ui::Board&) const override;

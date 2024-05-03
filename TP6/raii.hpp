@@ -1,11 +1,11 @@
 #pragma once
 #include <QPushButton>
 #include "piece.hpp"
-#include "cavalier.hpp"
-#include "roi.hpp"
-#include "tour.hpp"
+#include "knight.hpp"
+#include "king.hpp"
+#include "tower.hpp"
 #include "position.hpp"
-#include "echiquier.hpp"
+#include "board.hpp"
 
 #include <memory>
 

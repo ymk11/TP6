@@ -1,8 +1,8 @@
 #include <QApplication>
 #include <QMessageBox>
-#include "roi.hpp"
+#include "king.hpp"
 #include "kingException.hpp"
-#include "echiquier.hpp"
+#include "board.hpp"
 #include <iostream>
 #include <QSize>
 
@@ -12,9 +12,9 @@ void displayErrorBox() {
 	//example for exercise 2
 	try
 	{
-		chess::King r1(chess::Couleur::White);
-		chess::King r2(chess::Couleur::White);
-		chess::King r3(chess::Couleur::White);
+		chess::King r1(chess::Color::White);
+		chess::King r2(chess::Color::White);
+		chess::King r3(chess::Color::White);
 
 
 

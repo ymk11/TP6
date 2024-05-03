@@ -1,11 +1,11 @@
 ﻿#pragma once
-#include "cavalier.hpp"
-#include "echiquier.hpp"
+#include "knight.hpp"
+#include "board.hpp"
 #include <ranges>
 
 
 namespace chess {
-    Knight::Knight(Couleur couleur) : Piece(TypePiece::Knight,
+    Knight::Knight(Color couleur) : Piece(TypePiece::Knight,
         couleur, "..\\assets\\nd.png", "..\\assets\\nl.png") {}
 
    

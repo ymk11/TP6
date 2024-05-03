@@ -26,13 +26,13 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cavalier.hpp">
+    <ClCompile Include="knight.hpp">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="cavalier.cpp">
+    <ClCompile Include="knight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="echiquier.cpp">
+    <ClCompile Include="board.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="piece.cpp">
@@ -41,10 +41,10 @@
     <ClCompile Include="position.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="roi.cpp">
+    <ClCompile Include="king.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tour.cpp">
+    <ClCompile Include="tower.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="case.cpp">
@@ -53,9 +53,12 @@
     <ClCompile Include="raii.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="couleur.hpp">
+    <ClInclude Include="color.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="piece.hpp">
@@ -64,10 +67,10 @@
     <ClInclude Include="position.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="roi.hpp">
+    <ClInclude Include="king.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tour.hpp">
+    <ClInclude Include="tower.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="typepiece.hpp">
@@ -84,7 +87,7 @@
     <QtMoc Include="case.hpp">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="echiquier.hpp">
+    <QtMoc Include="board.hpp">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

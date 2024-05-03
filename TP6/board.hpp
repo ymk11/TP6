@@ -2,9 +2,10 @@
 #include <vector>
 #include "case.hpp"
 #include "piece.hpp"
-#include "QVBoxLayout"
-#include "QHBoxLayout"
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QMainWindow>
+
 
 
 namespace ui {
@@ -21,14 +22,14 @@ namespace ui {
         bool isEmptyCase(const chess::Position& position) ;
         void moveTo(const chess::Position& start, const chess::Position& destination, bool display = false);
         void moveToValid(const chess::Position& start, const chess::Position& destination);
-        bool isColor(chess::Couleur color, const chess::Position& position) ;
+        bool isColor(chess::Color color, const chess::Position& position) ;
         void selectPostions( bool select);
-        std::unordered_set<chess::Position, chess::PositionHash>getAllMovements(const chess::Couleur& color);
-        bool isCheck(const chess::Couleur& color);
+        std::unordered_set<chess::Position, chess::PositionHash>getAllMovements(const chess::Color& color);
+        bool isCheck(const chess::Color& color);
         bool isCheckMate();
-        chess::Position kingPosition(const chess::Couleur& color);
+        chess::Position kingPosition(const chess::Color& color);
         std::unordered_set<chess::Position, chess::PositionHash> getFilteredMovement();
-        chess::Couleur getInverseColor(const chess::Couleur& color);
+        chess::Color getInverseColor(const chess::Color& color);
         void emptyBoard();
         void setBoard(int modifier);
         void endGame();
@@ -39,7 +40,7 @@ namespace ui {
         std::unique_ptr<chess::Position> lastSelected_ = nullptr;
         chess::Position redPosition_;
 
-        chess::Couleur joueur_ = chess::Couleur::White;
+        chess::Color joueur_ = chess::Color::White;
         bool checkMate_ = true;
         bool ready_ = false;
         bool turnedRed_ = false;

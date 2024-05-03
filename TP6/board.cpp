@@ -1,7 +1,7 @@
-#include "echiquier.hpp"
-#include "Roi.hpp"
-#include "tour.hpp"
-#include "cavalier.hpp"
+#include "board.hpp"
+#include "king.hpp"
+#include "tower.hpp"
+#include "knight.hpp"
 #include "QLabel"
 #include <QRadioButton>
 #include <QMessageBox>
@@ -36,9 +36,9 @@ namespace ui {
             hBoxLayout->setSpacing(0);
 
             for (int j = 0; j < 8; j++) {
-                Couleur couleur = Couleur::White;
+                Color couleur = Color::White;
                 if ((j+i) % 2 == 0) {
-                    couleur = Couleur::Black;
+                    couleur = Color::Black;
                 }
                 plateau_[i][j] = std::make_unique<Case>(couleur,Position(i,j));
                 plateau_[i][j]->setMinimumSize(140, 140);
@@ -136,10 +136,10 @@ namespace ui {
         return getCase(position).getPieceInfo() == nullptr;
 
     }
-    chess::Couleur Board::getInverseColor(const chess::Couleur& color) {
-        return (color == chess::Couleur::White) ? chess::Couleur::Black : chess::Couleur::White;
+    chess::Color Board::getInverseColor(const chess::Color& color) {
+        return (color == chess::Color::White) ? chess::Color::Black : chess::Color::White;
     }
-    chess::Position Board::kingPosition(const chess::Couleur& color) {
+    chess::Position Board::kingPosition(const chess::Color& color) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 chess::Position pos(i, j);
@@ -153,7 +153,7 @@ namespace ui {
         return {};
     }
     
-    bool Board::isCheck(const chess::Couleur& color) {
+    bool Board::isCheck(const chess::Color& color) {
         std::unordered_set<chess::Position, chess::PositionHash> positions = getAllMovements(getInverseColor(color));
         bool val  = positions.find(kingPosition(color)) != positions.end();
         return val;
@@ -271,7 +271,7 @@ namespace ui {
             QMessageBox::information(nullptr, "Information", "The game has started!");
         }
     }
-    bool Board::isColor(chess::Couleur color, const chess::Position& position) {
+    bool Board::isColor(chess::Color color, const chess::Position& position) {
         return getCase(position).getPieceInfo()->getColor() == color;
     }
     
@@ -281,7 +281,7 @@ namespace ui {
             getCase(position).setSelect(select);
         }
     }
-    std::unordered_set<chess::Position, chess::PositionHash>  Board::getAllMovements(const chess::Couleur& color) {
+    std::unordered_set<chess::Position, chess::PositionHash>  Board::getAllMovements(const chess::Color& color) {
         std::unordered_set<chess::Position, chess::PositionHash> positions;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -310,62 +310,62 @@ namespace ui {
         emptyBoard();
         ready_ = true;
         if (modifier == 0) {
-            plateau_[0][4]->setPiece(make_unique<King>(King(Couleur::Black)), true);
-            plateau_[1][5]->setPiece(make_unique<Knight>(Knight(Couleur::Black)), true);
-            plateau_[1][2]->setPiece(make_unique<Knight>(Knight(Couleur::Black)), true);
-            plateau_[0][0]->setPiece(make_unique<Tower>(Tower(Couleur::Black)), true);
-            plateau_[0][7]->setPiece(make_unique<Tower>(Tower(Couleur::Black)), true);
+            plateau_[0][4]->setPiece(make_unique<King>(King(Color::Black)), true);
+            plateau_[1][5]->setPiece(make_unique<Knight>(Knight(Color::Black)), true);
+            plateau_[1][2]->setPiece(make_unique<Knight>(Knight(Color::Black)), true);
+            plateau_[0][0]->setPiece(make_unique<Tower>(Tower(Color::Black)), true);
+            plateau_[0][7]->setPiece(make_unique<Tower>(Tower(Color::Black)), true);
 
-            plateau_[7][4]->setPiece(make_unique<King>(King(Couleur::White)), true);
-            plateau_[6][5]->setPiece(make_unique<Knight>(Knight(Couleur::White)), true);
-            plateau_[6][2]->setPiece(make_unique<Knight>(Knight(Couleur::White)), true);
-            plateau_[7][0]->setPiece(make_unique<Tower>(Tower(Couleur::White)), true);
-            plateau_[7][7]->setPiece(make_unique<Tower>(Tower(Couleur::White)), true);
+            plateau_[7][4]->setPiece(make_unique<King>(King(Color::White)), true);
+            plateau_[6][5]->setPiece(make_unique<Knight>(Knight(Color::White)), true);
+            plateau_[6][2]->setPiece(make_unique<Knight>(Knight(Color::White)), true);
+            plateau_[7][0]->setPiece(make_unique<Tower>(Tower(Color::White)), true);
+            plateau_[7][7]->setPiece(make_unique<Tower>(Tower(Color::White)), true);
         }
         else if (modifier == 1) {
-            plateau_[0][1]->setPiece(make_unique<King>(King(Couleur::Black)), true);
-            plateau_[2][3]->setPiece(make_unique<Knight>(Knight(Couleur::Black)), true);
-            plateau_[1][2]->setPiece(make_unique<Knight>(Knight(Couleur::Black)), true);
-            plateau_[5][0]->setPiece(make_unique<Tower>(Tower(Couleur::Black)), true);
-            plateau_[0][7]->setPiece(make_unique<Tower>(Tower(Couleur::Black)), true);
+            plateau_[0][1]->setPiece(make_unique<King>(King(Color::Black)), true);
+            plateau_[2][3]->setPiece(make_unique<Knight>(Knight(Color::Black)), true);
+            plateau_[1][2]->setPiece(make_unique<Knight>(Knight(Color::Black)), true);
+            plateau_[5][0]->setPiece(make_unique<Tower>(Tower(Color::Black)), true);
+            plateau_[0][7]->setPiece(make_unique<Tower>(Tower(Color::Black)), true);
 
-            plateau_[5][0]->setPiece(make_unique<King>(King(Couleur::White)), true);
-            plateau_[7][3]->setPiece(make_unique<Knight>(Knight(Couleur::White)), true);
-            plateau_[6][2]->setPiece(make_unique<Knight>(Knight(Couleur::White)), true);
-            plateau_[4][4]->setPiece(make_unique<Tower>(Tower(Couleur::White)), true);
-            plateau_[7][4]->setPiece(make_unique<Tower>(Tower(Couleur::White)), true);
+            plateau_[5][0]->setPiece(make_unique<King>(King(Color::White)), true);
+            plateau_[7][3]->setPiece(make_unique<Knight>(Knight(Color::White)), true);
+            plateau_[6][2]->setPiece(make_unique<Knight>(Knight(Color::White)), true);
+            plateau_[4][4]->setPiece(make_unique<Tower>(Tower(Color::White)), true);
+            plateau_[7][4]->setPiece(make_unique<Tower>(Tower(Color::White)), true);
         }
         else if (modifier == 2) {
-            plateau_[0][5]->setPiece(make_unique<King>(King(Couleur::Black)), true);
-            plateau_[3][5]->setPiece(make_unique<Knight>(Knight(Couleur::White)), true);
-            plateau_[3][2]->setPiece(make_unique<Knight>(Knight(Couleur::White)), true);
-            plateau_[1][0]->setPiece(make_unique<Tower>(Tower(Couleur::Black)), true);
-            plateau_[1][7]->setPiece(make_unique<Tower>(Tower(Couleur::Black)), true);
+            plateau_[0][5]->setPiece(make_unique<King>(King(Color::Black)), true);
+            plateau_[3][5]->setPiece(make_unique<Knight>(Knight(Color::White)), true);
+            plateau_[3][2]->setPiece(make_unique<Knight>(Knight(Color::White)), true);
+            plateau_[1][0]->setPiece(make_unique<Tower>(Tower(Color::Black)), true);
+            plateau_[1][7]->setPiece(make_unique<Tower>(Tower(Color::Black)), true);
 
-            plateau_[7][5]->setPiece(make_unique<King>(King(Couleur::White)), true);
-            plateau_[4][5]->setPiece(make_unique<Knight>(Knight(Couleur::Black)), true);
-            plateau_[4][2]->setPiece(make_unique<Knight>(Knight(Couleur::Black)), true);
-            plateau_[7][1]->setPiece(make_unique<Tower>(Tower(Couleur::White)), true);
-            plateau_[6][6]->setPiece(make_unique<Tower>(Tower(Couleur::White)), true);
+            plateau_[7][5]->setPiece(make_unique<King>(King(Color::White)), true);
+            plateau_[4][5]->setPiece(make_unique<Knight>(Knight(Color::Black)), true);
+            plateau_[4][2]->setPiece(make_unique<Knight>(Knight(Color::Black)), true);
+            plateau_[7][1]->setPiece(make_unique<Tower>(Tower(Color::White)), true);
+            plateau_[6][6]->setPiece(make_unique<Tower>(Tower(Color::White)), true);
         }
         else if (modifier == 3) {
-            plateau_[0][5]->setPiece(make_unique<King>(King(Couleur::Black)), true);
-            plateau_[3][5]->setPiece(make_unique<Knight>(Knight(Couleur::Black)), true);
-            plateau_[3][2]->setPiece(make_unique<Knight>(Knight(Couleur::Black)), true);
-            plateau_[2][0]->setPiece(make_unique<Tower>(Tower(Couleur::Black)), true);
-            plateau_[2][7]->setPiece(make_unique<Tower>(Tower(Couleur::Black)), true);
+            plateau_[0][5]->setPiece(make_unique<King>(King(Color::Black)), true);
+            plateau_[3][5]->setPiece(make_unique<Knight>(Knight(Color::Black)), true);
+            plateau_[3][2]->setPiece(make_unique<Knight>(Knight(Color::Black)), true);
+            plateau_[2][0]->setPiece(make_unique<Tower>(Tower(Color::Black)), true);
+            plateau_[2][7]->setPiece(make_unique<Tower>(Tower(Color::Black)), true);
 
-            plateau_[7][4]->setPiece(make_unique<King>(King(Couleur::White)), true);
-            plateau_[4][5]->setPiece(make_unique<Knight>(Knight(Couleur::White)), true);
-            plateau_[4][2]->setPiece(make_unique<Knight>(Knight(Couleur::White)), true);
-            plateau_[6][4]->setPiece(make_unique<Tower>(Tower(Couleur::White)), true);
-            plateau_[6][7]->setPiece(make_unique<Tower>(Tower(Couleur::White)), true);
+            plateau_[7][4]->setPiece(make_unique<King>(King(Color::White)), true);
+            plateau_[4][5]->setPiece(make_unique<Knight>(Knight(Color::White)), true);
+            plateau_[4][2]->setPiece(make_unique<Knight>(Knight(Color::White)), true);
+            plateau_[6][4]->setPiece(make_unique<Tower>(Tower(Color::White)), true);
+            plateau_[6][7]->setPiece(make_unique<Tower>(Tower(Color::White)), true);
         }
     }
 
     void Board::endGame() {
         ready_ = false;
-        QString winner = (joueur_ == chess::Couleur::White) ? "Black" : "White";
+        QString winner = (joueur_ == chess::Color::White) ? "Black" : "White";
         QMessageBox::information(nullptr, "Information", (winner + " won!"));
 
     }
