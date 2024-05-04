@@ -1,7 +1,5 @@
 #include "board.hpp"
-#include "king.hpp"
-#include "tower.hpp"
-#include "knight.hpp"
+
 #include "QLabel"
 #include <QRadioButton>
 #include <QMessageBox>

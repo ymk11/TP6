@@ -2,6 +2,9 @@
 #include <vector>
 #include "case.hpp"
 #include "piece.hpp"
+#include "king.hpp"
+#include "tower.hpp"
+#include "knight.hpp"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QMainWindow>
@@ -35,7 +38,7 @@ namespace ui {
         void endGame();
     private:
 
-        std::vector<std::vector<std::unique_ptr<chess::Case>>> plateau_; // Représentation 2D du plateau
+        std::vector<std::vector<std::unique_ptr<chess::Case>>> plateau_; 
 
         std::unique_ptr<chess::Position> lastSelected_ = nullptr;
         chess::Position redPosition_;
