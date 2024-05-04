@@ -31,6 +31,9 @@ void displayErrorBox() {
 /*Il y a des problème de compilation non résolue de la librairie gtest dans test.cpp
 * Vous pourrez mettre test.cpp en commentaire pour tester le fonctionnement du jeux.
 * 
+* Il se peut que vous ayez à rebuild le projet si vous observer des prblémes de linkage en
+* runnant  l'application
+* 
 * Une fois la fenêtre de jeux ouverte, le button start game commence une partie en fonction
 * du board sélectionné.  le boutton end game permet d'arrêter une partie en cours pour en commencer
 * une nouvelle.  Le déplacement des pièces est similaire à celui de chess.com
