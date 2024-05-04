@@ -36,6 +36,7 @@ namespace ui {
         void emptyBoard();
         void setBoard(int modifier);
         void endGame();
+        void setSelected(const chess::Position& position);
     private:
 
         std::vector<std::vector<std::unique_ptr<chess::Case>>> plateau_; 
@@ -57,7 +58,7 @@ namespace ui {
         bool isValidClick(const chess::Position& position);
 
     private slots:
-        void handleButtonClick(const chess::Position& position); // Slot to handle button clicks
+        void handleButtonClick(const chess::Position& position); 
         void handleStartButton();
     };
 }

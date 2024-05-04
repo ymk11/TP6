@@ -137,77 +137,82 @@ TEST(Board, moveToValid) {
 	EXPECT_EQ(TypePiece::Knight, board.getCase(validPosition).getPieceInfo()->getTypePiece());
 }
 
-TEST(Board, check) { //to do
+TEST(Board, check) { 
 	Board board;
-	Position whiteKing(0, 0);
-	Position blackKing(7, 7);
-	Position whiteTower(3, 3);
-	Position blackKnight(4, 1);
+
+	Position blackKing(0, 4);
+	Position blackKnight(2, 7);
+	Position blackTower1(1, 4);
+	Position blackTower2(5, 6);
+
+	Position whiteTower(7, 0);
+	Position whiteKing(2, 5);
+	Position whiteKnight(3, 5);
+
 	board.setCase(whiteKing, make_unique<King>(King(Color::White)));
-	board.setCase(blackKing, make_unique<King>(King(Color::Black)));
 	board.setCase(whiteTower, make_unique<Tower>(Tower(Color::White)));
+	board.setCase(whiteKnight, make_unique<Knight>(Knight(Color::White)));
+
+	board.setCase(blackKing, make_unique<King>(King(Color::Black)));
 	board.setCase(blackKnight, make_unique<Knight>(Knight(Color::Black)));
-	board.moveToValid(blackKnight, whiteTower);
-	EXPECT_EQ(Color::Black, board.getCase(blackKnight).getPieceInfo()->getColor());
-	EXPECT_EQ(TypePiece::Knight, board.getCase(blackKnight).getPieceInfo()->getTypePiece());
-	Position validPosition(6, 5);
-	board.moveToValid(blackKnight, validPosition);
-	EXPECT_EQ(Color::Black, board.getCase(validPosition).getPieceInfo()->getColor());
-	EXPECT_EQ(TypePiece::Knight, board.getCase(validPosition).getPieceInfo()->getTypePiece());
+	board.setCase(blackTower1, make_unique<Tower>(Tower(Color::Black)));
+	board.setCase(blackTower2, make_unique<Tower>(Tower(Color::Black)));
+
+	EXPECT_EQ(true, board.isCheck(Color::White));
+	EXPECT_EQ(false, board.isCheckMate());
+	board.moveTo(whiteKing, Position(0, 0));
+	EXPECT_EQ(false, board.isCheck(Color::White));
+
 }
 
-TEST(Board, checkmate) { //to do
+TEST(Board, checkmate) { 
 	Board board;
-	Position whiteKing(0, 0);
-	Position blackKing(7, 7);
-	Position whiteTower(3, 3);
-	Position blackKnight(4, 1);
+	
+	Position blackKing(0, 4);
+	Position blackKnight(2, 7);
+	Position blackTower1(1, 4);
+	Position blackTower2(5, 6);
+
+	Position whiteTower(7, 0);
+	Position whiteKing(2, 5);
+	
 	board.setCase(whiteKing, make_unique<King>(King(Color::White)));
-	board.setCase(blackKing, make_unique<King>(King(Color::Black)));
 	board.setCase(whiteTower, make_unique<Tower>(Tower(Color::White)));
+
+	board.setCase(blackKing, make_unique<King>(King(Color::Black)));
 	board.setCase(blackKnight, make_unique<Knight>(Knight(Color::Black)));
-	board.moveToValid(blackKnight, whiteTower);
-	EXPECT_EQ(Color::Black, board.getCase(blackKnight).getPieceInfo()->getColor());
-	EXPECT_EQ(TypePiece::Knight, board.getCase(blackKnight).getPieceInfo()->getTypePiece());
-	Position validPosition(6, 5);
-	board.moveToValid(blackKnight, validPosition);
-	EXPECT_EQ(Color::Black, board.getCase(validPosition).getPieceInfo()->getColor());
-	EXPECT_EQ(TypePiece::Knight, board.getCase(validPosition).getPieceInfo()->getTypePiece());
+	board.setCase(blackTower1, make_unique<Tower>(Tower(Color::Black)));
+	board.setCase(blackTower2, make_unique<Tower>(Tower(Color::Black)));
+	
+	EXPECT_EQ(true, board.isCheckMate());
+	board.moveTo(whiteKing, Position(0, 0));
+	EXPECT_EQ(false, board.isCheckMate());
 }
-TEST(Board, allMovements) { //to do
+
+TEST(Board, filteredMovements) {
 	Board board;
-	Position whiteKing(0, 0);
-	Position blackKing(7, 7);
-	Position whiteTower(3, 3);
-	Position blackKnight(4, 1);
+
+	Position blackKing(0, 4);
+	Position blackKnight(2, 7);
+	Position blackTower1(1, 4);
+	Position blackTower2(5, 6);
+
+	Position whiteTower(7, 0);
+	Position whiteKing(2, 5);
+	Position whiteKnight(3, 5);
+
 	board.setCase(whiteKing, make_unique<King>(King(Color::White)));
-	board.setCase(blackKing, make_unique<King>(King(Color::Black)));
 	board.setCase(whiteTower, make_unique<Tower>(Tower(Color::White)));
-	board.setCase(blackKnight, make_unique<Knight>(Knight(Color::Black)));
-	board.moveToValid(blackKnight, whiteTower);
-	EXPECT_EQ(Color::Black, board.getCase(blackKnight).getPieceInfo()->getColor());
-	EXPECT_EQ(TypePiece::Knight, board.getCase(blackKnight).getPieceInfo()->getTypePiece());
-	Position validPosition(6, 5);
-	board.moveToValid(blackKnight, validPosition);
-	EXPECT_EQ(Color::Black, board.getCase(validPosition).getPieceInfo()->getColor());
-	EXPECT_EQ(TypePiece::Knight, board.getCase(validPosition).getPieceInfo()->getTypePiece());
-}
-TEST(Board, filteredMovements) {//to do
-	Board board;
-	Position whiteKing(0, 0);
-	Position blackKing(7, 7);
-	Position whiteTower(3, 3);
-	Position blackKnight(4, 1);
-	board.setCase(whiteKing, make_unique<King>(King(Color::White)));
+	board.setCase(whiteKnight, make_unique<Knight>(Knight(Color::White)));
+
 	board.setCase(blackKing, make_unique<King>(King(Color::Black)));
-	board.setCase(whiteTower, make_unique<Tower>(Tower(Color::White)));
 	board.setCase(blackKnight, make_unique<Knight>(Knight(Color::Black)));
-	board.moveToValid(blackKnight, whiteTower);
-	EXPECT_EQ(Color::Black, board.getCase(blackKnight).getPieceInfo()->getColor());
-	EXPECT_EQ(TypePiece::Knight, board.getCase(blackKnight).getPieceInfo()->getTypePiece());
-	Position validPosition(6, 5);
-	board.moveToValid(blackKnight, validPosition);
-	EXPECT_EQ(Color::Black, board.getCase(validPosition).getPieceInfo()->getColor());
-	EXPECT_EQ(TypePiece::Knight, board.getCase(validPosition).getPieceInfo()->getTypePiece());
+	board.setCase(blackTower1, make_unique<Tower>(Tower(Color::Black)));
+	board.setCase(blackTower2, make_unique<Tower>(Tower(Color::Black)));
+	board.setSelected(whiteKnight);
+	std::unordered_set<Position, PositionHash> filteredList = board.getFilteredMovement();
+	EXPECT_EQ(1, filteredList.size());
+	EXPECT_EQ(true, filteredList.contains(blackTower1));
+
 }
 #endif

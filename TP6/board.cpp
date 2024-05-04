@@ -367,5 +367,9 @@ namespace ui {
         QMessageBox::information(nullptr, "Information", (winner + " won!"));
 
     }
+
+    void Board::setSelected(const chess::Position& position) {
+        lastSelected_ = std::make_unique<chess::Position>(position);
+    }
 }
 
